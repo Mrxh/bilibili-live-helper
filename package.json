@@ -1,0 +1,53 @@
+{
+	"name": "bilibili-live-helper",
+	"version": "1.0.0",
+	"main": "dist/electron/main/index.js",
+	"description": "Really simple Electron + Vue + Vite boilerplate.",
+	"author": "阿阳 <https://space.bilibili.com/478490349>",
+	"license": "MIT",
+	"private": true,
+	"scripts": {
+		"dev": "vite",
+		"build": "vue-tsc --noEmit && vite build && electron-builder"
+	},
+	"engines": {
+		"node": ">=14.17.0"
+	},
+	"dependencies": {
+		"electron-store": "^8.0.2"
+	},
+	"devDependencies": {
+		"@arco-design/web-vue": "^2.32.1",
+		"@types/pako": "^2.0.0",
+		"@types/qrcode": "^1.4.2",
+		"@types/qs": "^6.9.7",
+		"@vitejs/plugin-vue": "^2.3.3",
+		"animate.css": "^4.1.1",
+		"axios": "^0.27.2",
+		"electron": "^19.0.3",
+		"electron-builder": "^23.0.3",
+		"nanoid": "^4.0.0",
+		"pako": "^2.0.4",
+		"pinia": "^2.0.14",
+		"qrcode": "^1.5.0",
+		"qs": "^6.11.0",
+		"sass": "^1.53.0",
+		"typescript": "^4.7.3",
+		"vite": "^2.9.13",
+		"vite-plugin-electron": "^0.6.2",
+		"vue": "^3.2.36",
+		"vue-router": "^4.0.16",
+		"vue-tsc": "^0.36.0"
+	},
+	"env": {
+		"VITE_DEV_SERVER_HOST": "127.0.0.1",
+		"VITE_DEV_SERVER_PORT": 3344
+	},
+	"keywords": [
+		"electron",
+		"rollup",
+		"vite",
+		"vue3",
+		"vue"
+	]
+}

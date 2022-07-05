@@ -1,0 +1,70 @@
+.account-info {
+	::v-deep(.arco-form-item) {
+		&:last-child {
+			.arco-form-item-content {
+				display: flex;
+				justify-content: flex-end;
+
+				gap: 12px;
+			}
+		}
+		.arco-form-item-label {
+			> span {
+				margin-right: 10px;
+			}
+			.arco-icon {
+				margin-right: 10px;
+
+				cursor: pointer;
+			}
+			i {
+				color: var(--color-text-3);
+
+				font-size: 12px;
+			}
+		}
+	}
+}
+
+.qrcode-popover {
+	padding: 0;
+
+	border-color: #e5e6eb;
+	.arco-popover-content {
+		margin: 0;
+
+		font-size: 0;
+		.scan-result {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+
+			width: 180px;
+			height: 180px;
+			.arco-result {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+
+				height: 100%;
+				padding: 15px;
+
+				background-color: rgba(255, 255, 255, 0.9);
+
+				gap: 20px;
+				.arco-result-icon,
+				.arco-result-extra {
+					margin: 0;
+				}
+				.arco-result-title {
+					line-height: 1;
+				}
+			}
+		}
+	}
+
+	+ .arco-trigger-arrow {
+		border-color: #e5e6eb;
+		background-color: #fff;
+	}
+}
