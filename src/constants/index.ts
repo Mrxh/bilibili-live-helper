@@ -25,6 +25,15 @@ const TOOLS_OPEN = {
 	prompt: "tools_open.prompt",
 };
 
+const VOICE_BROADCAST = {
+	isOpen: "voice_broadcast.isOpen",
+};
+
+const BARRAGE_SOUND = {
+	isOpen: "barrage_sound.isOpen",
+	value: "barrage_sound.volume",
+};
+
 export {
 	THEME,
 	OPACITY,
@@ -33,4 +42,6 @@ export {
 	UP_INFO,
 	ROBOT_INFO,
 	TOOLS_OPEN,
+	BARRAGE_SOUND,
+	VOICE_BROADCAST,
 };

@@ -86,7 +86,7 @@ const handleSubmit = (values: Record<string, any>) => {
 
 	if (isChange) {
 		getFromValue();
-		changeUpInfo();
+		changeUpInfo(values.uid);
 	}
 
 	Message.success("保存成功");

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import ToggleTheme from "@/components/toggle-theme/index.vue";
 import AccountInfo from "./components/account-info/index.vue";
+import VoiceBroadcast from "./components/voice-broadcast/index.vue";
 import OtherTools from "./components/other-tools/index.vue";
 import AboutHelper from "./components/about-helper/index.vue";
 import type { HelperSettingsTabItem } from "@/types";
@@ -28,7 +29,7 @@ const tabList: HelperSettingsTabItem[] = [
 	{
 		title: "语音播报",
 		icon: "icon-sound",
-		component: AboutHelper,
+		component: VoiceBroadcast,
 	},
 	{
 		title: "自动回复",
@@ -58,7 +59,7 @@ const tabList: HelperSettingsTabItem[] = [
 
 <template>
 	<div class="helper-settings">
-		<a-tabs position="left" animation>
+		<a-tabs position="left" animation :defaultActiveKey="3">
 			<a-tab-pane v-for="item in tabList" :key="item.key">
 				<template #title>
 					<component :is="item.icon" />

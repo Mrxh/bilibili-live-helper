@@ -8,8 +8,9 @@ import ActionMessage from "./components/barrage-message/action-message/index.vue
 import SendMessage from "./components/barrage-message/send-message/index.vue";
 import useCommonInfo from "@/hooks/useCommonInfo";
 import { getStore } from "@/stores/electron";
-import { OPACITY, IS_PENETRATE } from "@/constants";
-import { penetrateWindow } from "@/utils/electron";
+import { OPACITY, IS_PENETRATE, TOOLS_OPEN } from "@/constants";
+import { penetrateWindow, openNewWindow } from "@/utils/electron";
+import type { Hash } from "@/types";
 
 const { barrageList, initInfo, openWebsocket } = useCommonInfo();
 // 背景透明度
@@ -38,6 +39,19 @@ onMounted(async () => {
 	// 监听 up 登录信息的变化，然后重新刷新窗口
 	ipcRenderer.on("listen-up-info", () => {
 		window.location.reload();
+	});
+
+	// 初始化开启跟随直播助手一起开启的窗口
+	const otherTools: Record<keyof typeof TOOLS_OPEN, Hash> = {
+		music: "/music",
+		fans: "/fans",
+		prompt: "/prompt",
+	};
+
+	(Object.keys(otherTools) as (keyof typeof TOOLS_OPEN)[]).forEach((key) => {
+		if (getStore(TOOLS_OPEN[key])) {
+			openNewWindow(otherTools[key]);
+		}
 	});
 });
 

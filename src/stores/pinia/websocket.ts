@@ -3,6 +3,7 @@ import { nanoid } from "nanoid";
 import { encode, decode, colorHexToRgba } from "@/utils/barrage";
 import { getStore } from "@/stores/electron";
 import { UP_INFO } from "@/constants";
+import { getAudioFiles, playAudio, splitAudioSuffix } from "@/utils/nodejs";
 import { receiveNewSongBarrage } from "@/utils/electron";
 import type { BarrageItem } from "@/types";
 
@@ -112,12 +113,25 @@ export const useWebsocketStore = defineStore({
 											barrageType: "general",
 										});
 
+										const message =
+											barrageInfo.message.trim();
+										// 先判断是否触发音效
+										const findAudio = getAudioFiles()?.find(
+											(item) =>
+												splitAudioSuffix(item).includes(
+													message
+												) ||
+												message.includes(
+													splitAudioSuffix(item)
+												)
+										);
+
+										if (findAudio) {
+											playAudio(findAudio);
+										}
+
 										// 如果点|切歌操作，就通知音乐窗口
-										if (
-											/^(点歌|切歌$)/.test(
-												barrageInfo.message.trim()
-											)
-										) {
+										if (/^(点歌|切歌$)/.test(message)) {
 											receiveNewSongBarrage(barrageInfo);
 										}
 									} else if (

@@ -53,8 +53,8 @@ const getFansApi = async () =>
 		},
 	});
 
-// 获取 up 最新的一期视频
-const getUpNewVideoApi = async () =>
+// 获取 up 最新的一期视频的 bvid
+const getUpNewVideoBVidApi = async () =>
 	await getQueryData(`${baseUrl}/x/space/arc/search`, {
 		params: {
 			mid: getStore(UP_INFO.uid),
@@ -66,13 +66,20 @@ const getUpNewVideoApi = async () =>
 		returnErrorResult: true,
 	});
 
+// 获取 up 最新一期视频的信息
+const getUpNewVideoInfoApi = async (bvid: string) =>
+	await getQueryData(`${baseUrl}/x/web-interface/view`, {
+		params: { bvid },
+	});
+
 // 获取小破站用户基本信息
-const getUserInfoApi = async (mid?: string) =>
-	await getQueryData(`${baseUrl}/x/space/acc/info`, {
+async function getUserInfoApi(mid?: string) {
+	return await getQueryData(`${baseUrl}/x/space/acc/info`, {
 		params: {
 			mid: mid || getStore(UP_INFO.uid),
 		},
 	});
+}
 
 // 获取礼物列表
 const getGiftApi = async () => {
@@ -157,6 +164,7 @@ const verifyQrCodeApi = async (oauthKey: string) =>
 		returnErrorResult: true,
 	});
 
+// 发送消息
 const sendMessageApi = async (message: SendMessage) => {
 	let cookie, csrf;
 
@@ -192,7 +200,8 @@ const sendMessageApi = async (message: SendMessage) => {
 
 export {
 	getFansApi,
-	getUpNewVideoApi,
+	getUpNewVideoBVidApi,
+	getUpNewVideoInfoApi,
 	getUserInfoApi,
 	getGiftApi,
 	getEmojiApi,

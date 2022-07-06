@@ -145,4 +145,4 @@ ipcMain.on("new-sone-barrage", (_, value) =>
 );
 
 // 接收渲染进程发送的 up 主登录信息发生变化的消息，然后分发给每个渲染进程
-ipcMain.on("up-info-change", () => sendAllWindows("listen-up-info"));
+ipcMain.on("up-info-change", (_, uid) => sendAllWindows("listen-up-info", uid));

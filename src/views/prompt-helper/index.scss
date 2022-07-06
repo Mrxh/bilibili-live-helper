@@ -1,0 +1,54 @@
+.prompt-helper {
+	height: 100vh;
+
+	color: #cacdd3;
+	background-color: rgba(0, 0, 0, 0.7);
+
+	-webkit-app-region: no-drag;
+
+	h1 {
+		padding: 10px;
+
+		cursor: pointer;
+		text-align: center;
+		letter-spacing: 3px;
+
+		border-bottom: 1px solid #828282;
+
+		font-size: 19px;
+
+		-webkit-app-region: drag;
+	}
+
+	.title {
+		padding: 10px;
+
+		font-size: 18px;
+		font-weight: normal;
+	}
+
+	.content-list {
+		overflow: auto;
+
+		height: calc(100% - 78px);
+		padding: 0 10px;
+		ul {
+			font-size: 16px;
+			> li {
+				padding-bottom: 15px;
+
+				line-height: 1.5;
+				ol {
+					display: flex;
+					flex-wrap: wrap;
+
+					gap: 10px;
+				}
+			}
+		}
+		&::-webkit-scrollbar {
+			width: 0;
+			height: 0;
+		}
+	}
+}

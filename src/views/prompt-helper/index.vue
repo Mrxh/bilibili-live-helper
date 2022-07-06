@@ -1,27 +1,83 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
+import { getAudioFiles, splitAudioSuffix } from "@/utils/nodejs";
+
+// 内容列表外层元素
+const listOuterRef = ref<HTMLDivElement>();
+// 内容列表内部元素
+const listInnerRef = ref<HTMLUListElement>();
+// 音频关键词关键词列表
+const audioKeywords = ref<string[]>([]);
+
+// 定时器
+let timer: NodeJS.Timer | null = null;
+
+// 列表滚动
+const onScroll = () => {
+	setTimeout(() => {
+		listOuterRef.value?.appendChild(listInnerRef.value?.cloneNode(true)!);
+
+		timer = setInterval(() => {
+			if (
+				listOuterRef.value?.scrollTop! >=
+				listInnerRef.value?.scrollHeight!
+			) {
+				listOuterRef.value!.scrollTop = 0;
+			} else {
+				listOuterRef.value!.scrollTop += 0.5;
+			}
+		}, 50);
+	}, 0);
+};
+
+// 停止滚动
+const stopScroll = () => {
+	timer && clearInterval(timer);
+	timer = null;
+};
+
+onMounted(() => {
+	const files = getAudioFiles();
+
+	if (files?.length) {
+		audioKeywords.value = files.map((item) => splitAudioSuffix(item));
+	}
+
+	onScroll();
+});
 </script>
 
 <template>
 	<div class="prompt-helper">
-		<div class="title">欢迎各位观众姥爷进入直播间</div>
+		<h1>🥳 欢迎各位大佬进入直播间</h1>
 
-		<h1>直播间小彩蛋：(均在开发中...)</h1>
+		<div class="title">直播间小彩蛋：(开发ing...)</div>
 
-		<div class="contentList" ref="contentList">
-			<ul ref="list">
+		<div
+			class="content-list"
+			ref="listOuterRef"
+			@mouseenter="stopScroll"
+			@mouseleave="onScroll"
+		>
+			<ul ref="listInnerRef">
 				<li>1. 关注up可以触发左下角窗口的动画和音效！</li>
-				<li>2. 直播间发送常见问题触发自动回复！</li>
 				<li>
-					<p>例如：</p>
-					<div>
-						<p>阿阳热爱前端：阿阳年龄多大了？</p>
-						<p>自动回复阿阳热爱前端：18！</p>
-					</div>
+					2. 直播间发送常见问题触发自动回复！
+					<ol>
+						<li>例如：</li>
+						<li>
+							<span>阿阳热爱前端：阿阳年龄多大了？</span>
+							<span>自动回复阿阳热爱前端：18！</span>
+						</li>
+					</ol>
 				</li>
-				<li>3. 直播间发送以下关键词即可触发音效！</li>
 				<li>
-					ohhhh、whooo、nice、哦买噶、哈哈哈、饮茶先啦、表哥，我出来了、你一个人在这干嘛、拿来吧你、奥利给（可以投稿持续添加哦~）
+					3. 直播间发送以下指定关键词即可触发音效！(表情包也可触发)
+					<ol>
+						<li v-for="(item, index) in audioKeywords">
+							{{ index + 1 }}. {{ item }}
+						</li>
+					</ol>
 				</li>
 				<li>
 					4. 直播间发送：<br />点歌 + 空格 + 歌曲名 + 空格 +
@@ -38,65 +94,5 @@ import { ref } from "vue";
 </template>
 
 <style scoped lang="scss">
-.prompt-helper {
-	height: 100vh;
-	padding: 10px 0;
-
-	cursor: pointer;
-	user-select: none;
-
-	color: #cacdd3;
-	background-color: rgba(0, 0, 0, 0.7);
-
-	font-family: cat;
-
-	-webkit-app-region: drag;
-	.title {
-		padding-bottom: 10px;
-
-		text-align: center;
-		letter-spacing: 3px;
-
-		border-bottom: 1px solid #ccc;
-
-		font-size: 22px;
-	}
-
-	h1 {
-		padding: 10px;
-
-		font-size: 20px;
-		font-weight: normal;
-	}
-
-	.contentList {
-		overflow: auto;
-
-		height: calc(100vh - 101px);
-		padding: 0 10px;
-
-		font-size: 18px;
-
-		ul {
-			list-style: none;
-			li {
-				display: flex;
-
-				padding-bottom: 10px;
-
-				div {
-					p {
-						&:not(:last-child) {
-							margin-bottom: 10px;
-						}
-					}
-				}
-			}
-		}
-		&::-webkit-scrollbar {
-			width: 0;
-			height: 0;
-		}
-	}
-}
+@import "./index.scss";
 </style>

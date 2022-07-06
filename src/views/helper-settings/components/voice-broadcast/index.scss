@@ -1,0 +1,16 @@
+.voice-broadcast {
+	display: flex;
+	flex-direction: column;
+
+	gap: 20px;
+	li {
+		.switch {
+			display: flex;
+			align-items: center;
+
+			gap: 10px;
+		}
+		.content {
+		}
+	}
+}

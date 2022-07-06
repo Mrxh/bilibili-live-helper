@@ -1,8 +1,8 @@
 {
-	"name": "bilibili-live-helper",
+	"name": "bilibili-live-helper12",
 	"version": "1.0.0",
 	"main": "dist/electron/main/index.js",
-	"description": "Really simple Electron + Vue + Vite boilerplate.",
+	"description": "A software that helps you live better on bilibili",
 	"author": "阿阳 <https://space.bilibili.com/478490349>",
 	"license": "MIT",
 	"private": true,
@@ -18,6 +18,7 @@
 	},
 	"devDependencies": {
 		"@arco-design/web-vue": "^2.32.1",
+		"@types/mime-types": "^2.1.1",
 		"@types/pako": "^2.0.0",
 		"@types/qrcode": "^1.4.2",
 		"@types/qs": "^6.9.7",
@@ -26,6 +27,8 @@
 		"axios": "^0.27.2",
 		"electron": "^19.0.3",
 		"electron-builder": "^23.0.3",
+		"fs": "^0.0.1-security",
+		"mime-types": "^2.1.35",
 		"nanoid": "^4.0.0",
 		"pako": "^2.0.4",
 		"pinia": "^2.0.14",
