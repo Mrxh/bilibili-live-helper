@@ -40,7 +40,7 @@ onMounted(() => {
 			action2: gift_action,
 			gift1: original_gift_name,
 			gift2: gift_name,
-			gift2Id: gift_id,
+			gift2Id: giftId || gift_id,
 			number: gift_num,
 		};
 	} else {

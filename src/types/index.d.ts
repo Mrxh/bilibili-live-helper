@@ -2,6 +2,11 @@ import type { Component } from "vue";
 
 export type Hash = "/" | "/settings" | "/fans" | "/music" | "/prompt";
 
+interface WindowSize {
+	width: number;
+	height: number;
+}
+
 export type QueryDataArgs = {
 	method?: "get" | "post";
 	params?: Record<string, any>;
@@ -94,4 +99,18 @@ export interface BarrageMedal {
 	borderColor: string;
 	bgStartColor: string;
 	bgEndColor: string;
+}
+
+export interface NewVideoInfo {
+	fans: number;
+	face: string;
+	name: string;
+	title: string;
+	view: number;
+	like: number;
+	coin: number;
+	favorite: number;
+	share: number;
+	reply: number;
+	danmaku: number;
 }

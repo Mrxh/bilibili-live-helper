@@ -17,8 +17,8 @@ const getStore = (key: string, isDecrypt = true) => {
 	} else if (key === UP_INFO.uid) {
 		// 默认 up uid
 		defaultValue = 478490349;
-	} else if (key === IS_TOP) {
-		// 默认弹幕助手是否置顶
+	} else if (key === IS_TOP["/"]) {
+		// 默认弹幕助手置顶
 		defaultValue = true;
 	} else if (key === OPACITY) {
 		// 直播助手 默认透明度 0 - 100

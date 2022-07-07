@@ -44,8 +44,8 @@ const windowOptions: Record<Hash, BrowserWindowConstructorOptions> = {
 	"/fans": {
 		x: 0,
 		y: 0,
-		height: 250,
 		width: 500,
+		height: 260,
 		useContentSize: true,
 		maximizable: false,
 		transparent: true,

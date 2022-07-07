@@ -3,7 +3,7 @@ import QS from "qs";
 import request from "@/utils/request";
 import { getStore } from "@/stores/electron";
 import { UP_INFO, ROBOT_INFO } from "@/constants";
-import type { QueryDataArgs, SendMessage } from "@/types";
+import type { QueryDataArgs, SendMessage, NewVideoInfo } from "@/types";
 
 // 公共的请求头
 const baseUrl = "https://api.bilibili.com";
@@ -67,10 +67,43 @@ const getUpNewVideoBVidApi = async () =>
 	});
 
 // 获取 up 最新一期视频的信息
-const getUpNewVideoInfoApi = async (bvid: string) =>
-	await getQueryData(`${baseUrl}/x/web-interface/view`, {
-		params: { bvid },
+const getUpNewVideoInfoApi = async () => {
+	// 获取粉丝
+	const fansResult = await getFansApi();
+
+	if (!fansResult) return;
+
+	// 获取 bvid
+	const bvidResult = await getUpNewVideoBVidApi();
+
+	if (!!bvidResult?.code) return;
+
+	const result = await getQueryData(`${baseUrl}/x/web-interface/view`, {
+		params: { bvid: bvidResult.data.list.vlist[0].bvid },
 	});
+
+	if (!!result?.code) return;
+
+	const {
+		title,
+		owner: { face, name },
+		stat: { view, like, coin, favorite, share, reply, danmaku },
+	} = result.data;
+
+	return {
+		title,
+		face,
+		name,
+		view,
+		like,
+		coin,
+		favorite,
+		share,
+		reply,
+		danmaku,
+		fans: fansResult.data.follower,
+	} as NewVideoInfo;
+};
 
 // 获取小破站用户基本信息
 async function getUserInfoApi(mid?: string) {

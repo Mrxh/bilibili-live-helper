@@ -4,6 +4,7 @@ import useCommonInfo from "@/hooks/useCommonInfo";
 import { upIsLogin } from "@/utils/auth";
 import { sendMessageApi } from "@/api";
 import type { SendMessage } from "@/types";
+import { Message } from "@arco-design/web-vue";
 
 // 获取表情列表
 const { emojiList } = useCommonInfo();
@@ -51,8 +52,12 @@ const sendMessage = async (value?: string) => {
 			dm_type: 1,
 		};
 	} else {
+		const msg = inputValue.value.trim();
+
+		if (!msg) return;
+
 		params = {
-			msg: inputValue.value,
+			msg,
 		};
 	}
 
@@ -61,9 +66,17 @@ const sendMessage = async (value?: string) => {
 	// 发送完关闭表情弹框
 	setVisible();
 
-	// 不是表情弹幕并且发送成功就清空输入框的内容
-	if (!value && result) {
-		inputValue.value = "";
+	if (result) {
+		if (result.message) {
+			Message.error("含有敏感词，请重新输入！");
+
+			return;
+		}
+
+		// 不是表情弹幕并且发送成功就清空输入框的内容
+		if (!value) {
+			inputValue.value = "";
+		}
 	}
 };
 </script>

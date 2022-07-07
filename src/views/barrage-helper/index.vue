@@ -100,7 +100,7 @@ watch(barrageList.value, () => {
 		<ul
 			class="message-list"
 			ref="messageListRef"
-			@mouseenter="penetrateWindow(getStore(IS_PENETRATE))"
+			@mouseenter="penetrateWindow(getStore(IS_PENETRATE['/']!))"
 			@mouseleave="penetrateWindow(false)"
 			@scroll="onScroll"
 		>

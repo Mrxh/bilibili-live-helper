@@ -1,5 +1,5 @@
 import { ipcRenderer } from "electron";
-import type { Hash } from "@/types";
+import type { Hash, WindowSize } from "@/types";
 
 // 打开新窗口
 const openNewWindow = (hash: Hash) => {
@@ -45,6 +45,11 @@ const changeUpInfo = (uid: number) => {
 	ipcRenderer.send("up-info-change", uid);
 };
 
+// 更改窗口的大小
+const changeWidowSize = (params: WindowSize) => {
+	ipcRenderer.send("change-window-size", params);
+};
+
 export {
 	openNewWindow,
 	topWindow,
@@ -54,4 +59,5 @@ export {
 	receiveNewSongBarrage,
 	toggleWindowTheme,
 	changeUpInfo,
+	changeWidowSize,
 };

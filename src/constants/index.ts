@@ -1,10 +1,20 @@
+import type { Hash } from "@/types";
+
 const THEME = "theme";
 
 const OPACITY = "opacity";
 
-const IS_TOP = "is_top";
+const IS_TOP: Partial<Record<Hash, string>> = {
+	"/": "is_top./",
+	"/fans": "is_top./fans",
+	"/prompt": "is_top./prompt",
+};
 
-const IS_PENETRATE = "is_penetrate";
+const IS_PENETRATE: Partial<Record<Hash, string>> = {
+	"/": "is_penetrate./",
+	"/fans": "is_penetrate./fans",
+	"/prompt": "is_penetrate./prompt",
+};
 
 const UP_INFO = {
 	uid: "up_info.uid",
