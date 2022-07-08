@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, computed } from "vue";
 import { ipcRenderer } from "electron";
 import BarrageHeader from "./components/barrage-header/index.vue";
 import GeneralMessage from "./components/barrage-message/general-message/index.vue";
@@ -12,7 +12,7 @@ import { OPACITY, IS_PENETRATE, TOOLS_OPEN } from "@/constants";
 import { penetrateWindow, openNewWindow } from "@/utils/electron";
 import type { Hash } from "@/types";
 
-const { barrageList, initInfo, openWebsocket } = useCommonInfo();
+const { barrageList, initInfo, openWebsocket, welcomeList } = useCommonInfo();
 // 背景透明度
 const opacity = ref(getStore(OPACITY));
 // 消息列表元素
@@ -21,6 +21,13 @@ const messageListRef = ref();
 const isBottom = ref(true);
 // 未读消息数量
 const unreadCount = ref(0);
+// 计算出最新的一条欢迎信息
+const upToDateWelcome = computed(() => {
+	if (welcomeList.value.length == 0) {
+		return null;
+	}
+	return welcomeList.value[welcomeList.value.length - 1];
+});
 
 onMounted(async () => {
 	// 监听透明度的变化
@@ -117,11 +124,20 @@ watch(barrageList.value, () => {
 					v-else-if="item.barrageType === 'gift'"
 					:barrage="item.barrage"
 				/>
-				<ActionMessage v-else :barrage="item.barrage" />
 			</li>
 		</ul>
 
-		<!-- 去底部 -->
+		<!-- 欢迎信息 -->
+		<div class="welcome-message" v-if="upToDateWelcome">
+			<Transition name="zoom-fade" mode="out-in" appear>
+				<ActionMessage
+					:key="upToDateWelcome.id"
+					:barrage="upToDateWelcome.barrage"
+				/>
+			</Transition>
+		</div>
+
+		<!-- 跳转至底部的按钮 -->
 		<a-button
 			class="to-bottom"
 			type="primary"

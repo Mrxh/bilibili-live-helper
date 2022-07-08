@@ -8,7 +8,7 @@ const useCommonInfo = () => {
 	const { initInfo } = userInfoStore;
 
 	const websocketStore = useWebsocketStore();
-	const { popularity, rankList, barrageList } = storeToRefs(websocketStore);
+	const { popularity, rankList, barrageList, welcomeList } = storeToRefs(websocketStore);
 	const { openWebsocket } = websocketStore;
 
 	return {
@@ -20,6 +20,7 @@ const useCommonInfo = () => {
 		barrageList,
 		initInfo,
 		openWebsocket,
+		welcomeList,
 	};
 };
 

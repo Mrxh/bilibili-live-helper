@@ -7,7 +7,7 @@
 		overflow: auto;
 		overflow-x: hidden;
 
-		height: calc(100% - 68px);
+		height: calc(100% - 88px);
 		padding: 10px;
 
 		scroll-behavior: smooth;
@@ -38,6 +38,14 @@
 		}
 	}
 
+	.welcome-message{
+		display: fixed;
+		overflow: hidden;
+		bottom: 25px;
+		// height: 30px;
+		margin-left: 10px;
+	}
+
 	.arco-btn.to-bottom {
 		position: fixed;
 		right: 20px;
@@ -61,4 +69,20 @@
 			background-color: inherit;
 		}
 	}
+}
+
+// zoom-fade
+.zoom-fade-enter-active,
+.zoom-fade-leave-active {
+  transition: transform 0.2s, opacity 0.3s ease-out;
+}
+
+.zoom-fade-enter-from {
+  opacity: 0;
+  transform: scale(0.92);
+}
+
+.zoom-fade-leave-to {
+  opacity: 0;
+  transform: scale(1.06);
 }

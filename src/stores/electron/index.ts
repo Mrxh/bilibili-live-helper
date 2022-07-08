@@ -16,7 +16,7 @@ const getStore = (key: string, isDecrypt = true) => {
 		defaultValue = "light";
 	} else if (key === UP_INFO.uid) {
 		// 默认 up uid
-		defaultValue = 478490349;
+		defaultValue = 862684;
 	} else if (key === IS_TOP["/"]) {
 		// 默认弹幕助手置顶
 		defaultValue = true;
