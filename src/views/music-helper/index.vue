@@ -1,39 +1,15 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import { ipcRenderer } from "electron";
 import { penetrateWindow } from "@/utils/electron";
-import type { MusicInfo } from "@/types";
-// 创建一个 audio 对象
-const audio = new Audio();
-// 当前正在播放的音乐信息
-const currentMusicInfo = ref();
-// 歌单列表
-const songList = ref<MusicInfo[]>([]);
-// 正在播报的歌单里的音乐序号
-const currentBroadcast = ref<number>(1);
-// 切歌列表
-const cutSong = ref<number[]>([]);
+import useMusicInfo from "@/hooks/useMusicInfo";
+import dayjs from "dayjs";
 
-onMounted(() => {
-	// 初始话随机播放
-	// 3778678
-
-	// 监听点|切歌消息
-	ipcRenderer.on("listen-sone-barrage", (_, barrage) => {
-		const { message, uname, uid } = barrage;
-		// 点歌操作
-		if (message.includes("点歌")) {
-			const musicName = message.replaceAll("点歌", "").trim();
-			// 如果歌曲名为空，无操作
-			if (!musicName) return;
-
-			songList.value.push({ uname, musicName });
-		} else {
-			// 切歌操作
-			cutSong.value = [...new Set([...cutSong.value, uid])];
-		}
-	});
-});
+const {
+	currentPlaySong,
+	songPlayList,
+	currentBroadcastIndex,
+	cutSongList,
+	coverElement,
+} = useMusicInfo();
 </script>
 
 <template>
@@ -45,44 +21,63 @@ onMounted(() => {
 			@mouseleave="penetrateWindow(false)"
 		></div>
 		<!-- 音乐图片 -->
-		<a-avatar :size="75">歌曲图片</a-avatar>
+		<a-avatar :size="75">
+			<span v-if="!currentPlaySong?.cover">歌曲图片</span>
+
+			<img
+				ref="coverElement"
+				:src="currentPlaySong?.cover"
+				:alt="currentPlaySong?.name"
+				v-else
+			/>
+		</a-avatar>
 		<!-- 主要内容部分 -->
 		<div class="content">
-			<!-- 音乐信息 -->
-			<div class="music-info">
-				<!-- 音乐名称 -->
-				<div class="name">年少有为</div>
-				<!-- 歌手 -->
-				<div class="singer">李荣浩</div>
-			</div>
-			<!-- 切歌 -->
-			<div class="cut-song">
-				切歌 <span>{{ cutSong.length }}</span> / 3
-			</div>
-			<!-- 歌词 -->
-			<div class="lyric">歌词</div>
-			<!-- 点歌列表 -->
-			<div class="song-list">
-				<div class="has-song" v-if="songList.length">
-					<a-carousel
-						direction="vertical"
-						show-arrow="never"
-						auto-play
-						@change="(value) => (currentBroadcast = value)"
-					>
-						<a-carousel-item v-for="item in songList">
-							<em>{{ item.uname }}</em> 点了首
-							<em>{{ item.musicName }}</em>
-						</a-carousel-item>
-					</a-carousel>
-
-					<span>
-						<em>{{ currentBroadcast }}</em> / {{ songList.length }}
-					</span>
+			<template v-if="currentPlaySong">
+				<!-- 音乐信息 -->
+				<div class="music-info">
+					<!-- 音乐名称 -->
+					<div class="name">{{ currentPlaySong?.name }}</div>
+					<!-- 歌手 -->
+					<div class="singer">{{ currentPlaySong?.singer }}</div>
 				</div>
+				<!-- 切歌 -->
+				<div class="cut-song">
+					切歌 <span>{{ cutSongList.length }}</span> / 3
+				</div>
+				<!-- 歌词 -->
+				<!-- <div class="lyric">{{ currentPlaySong?.lyric }}</div> -->
+				<div class="lyric">我正在做歌词显示</div>
+				<!-- 点歌列表 -->
+				<div class="song-list">
+					<div class="has-song" v-if="songPlayList.length">
+						<a-carousel
+							direction="vertical"
+							show-arrow="never"
+							auto-play
+							@change="(value) => (currentBroadcastIndex = value)"
+						>
+							<a-carousel-item v-for="item in songPlayList">
+								<em>{{ item.uname }}</em> 点了首
+								<em>{{ item.musicName }}</em>
+							</a-carousel-item>
+						</a-carousel>
 
-				<div class="no-song" v-else>暂无观众姥爷点歌</div>
-			</div>
+						<span>
+							<em>{{ currentBroadcastIndex }}</em> /
+							{{ songPlayList.length }}
+						</span>
+					</div>
+
+					<div class="no-song" v-else>暂无观众姥爷点歌</div>
+				</div>
+			</template>
+
+			<a-spin
+				tip="初始化点歌助手，将随机播放热门歌曲"
+				:size="32"
+				v-else
+			/>
 		</div>
 	</div>
 </template>

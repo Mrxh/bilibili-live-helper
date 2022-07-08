@@ -34,7 +34,7 @@ const getQueryData = async (
 				break;
 		}
 
-		if (returnErrorResult || result?.code === 0) {
+		if (returnErrorResult || result?.code === 0 || result?.code === 200) {
 			return result;
 		} else {
 			Message.error(result?.message || "请求出错，再试试吧~");
@@ -231,11 +231,27 @@ const sendMessageApi = async (message: SendMessage) => {
 	});
 };
 
-// 搜索音乐
-const searchMusicApi = async (keywords: string) =>
+// 查找歌单信息
+const searchPlaylistInfoApi = async (id: number) =>
+	await getQueryData("https://music-node.vercel.app/playlist/detail", {
+		params: {
+			id,
+		},
+	});
+
+// 搜索音乐信息
+const searchMusicInfoApi = async (keywords: string) =>
 	await getQueryData("https://music-node.vercel.app/cloudsearch", {
 		params: {
 			keywords,
+		},
+	});
+
+// 搜索歌词
+const searchLyricApi = async (id: number) =>
+	await getQueryData("https://music-node.vercel.app/lyric", {
+		params: {
+			id,
 		},
 	});
 
@@ -250,4 +266,7 @@ export {
 	getLoginUrlApi,
 	verifyQrCodeApi,
 	sendMessageApi,
+	searchPlaylistInfoApi,
+	searchMusicInfoApi,
+	searchLyricApi,
 };
