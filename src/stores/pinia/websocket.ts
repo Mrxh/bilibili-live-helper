@@ -22,6 +22,8 @@ export const useWebsocketStore = defineStore({
 		rankList: [] as any[],
 		// 弹幕列表
 		barrageList: [] as BarrageItem[],
+		// 欢迎信息列表
+		welcomeList: [] as BarrageItem[]
 	}),
 
 	actions: {
@@ -148,13 +150,13 @@ export const useWebsocketStore = defineStore({
 											barrageType: "gift",
 										});
 									} else if (cmd.includes("INTERACT_WORD")) {
-										this.barrageList.push({
+										this.welcomeList.push({
 											id,
 											barrage: { ...item.data },
 											barrageType: "action",
 										});
 									} else if (cmd.includes("ENTRY_EFFECT")) {
-										this.barrageList.push({
+										this.welcomeList.push({
 											id,
 											barrage: {
 												...item.data,
@@ -165,7 +167,7 @@ export const useWebsocketStore = defineStore({
 									} else if (
 										cmd.includes("ONLINE_RANK_TOP3")
 									) {
-										this.barrageList.push({
+										this.welcomeList.push({
 											id,
 											barrage: {
 												rankInfo: item.data.list[0],
