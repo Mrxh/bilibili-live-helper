@@ -114,3 +114,8 @@ export interface NewVideoInfo {
 	reply: number;
 	danmaku: number;
 }
+
+export interface MusicInfo {
+	uname: string;
+	musicName: string;
+}

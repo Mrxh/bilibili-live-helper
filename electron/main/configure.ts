@@ -35,37 +35,40 @@ const windowOptions: Record<Hash, BrowserWindowConstructorOptions> = {
 		useContentSize: true,
 		maximizable: false,
 		resizable: false,
-		alwaysOnTop: true,
 	},
 	"/music": {
 		x: 0,
 		y: 2000,
-	},
-	"/fans": {
-		x: 0,
-		y: 0,
-		width: 500,
-		height: 260,
-		useContentSize: true,
+		width: 400,
+		height: 170,
 		maximizable: false,
 		transparent: true,
 		resizable: false,
 		frame: false,
-		center: true,
 		alwaysOnTop: true,
+	},
+	"/fans": {
+		width: 500,
+		height: 260,
+		x: 0,
+		y: 0,
+		maximizable: false,
+		transparent: true,
+		resizable: false,
+		frame: false,
 	},
 	"/prompt": {
 		width: 350,
 		height: 450,
 		x: 2000,
 		y: 0,
-		useContentSize: true,
 		maximizable: false,
 		transparent: true,
 		resizable: false,
 		frame: false,
-		alwaysOnTop: true,
 	},
 };
 
-export { windowName, windowOptions };
+const menuTemplate = [];
+
+export { windowName, windowOptions, menuTemplate };

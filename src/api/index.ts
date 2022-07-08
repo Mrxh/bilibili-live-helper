@@ -231,6 +231,14 @@ const sendMessageApi = async (message: SendMessage) => {
 	});
 };
 
+// 搜索音乐
+const searchMusicApi = async (keywords: string) =>
+	await getQueryData("https://music-node.vercel.app/cloudsearch", {
+		params: {
+			keywords,
+		},
+	});
+
 export {
 	getFansApi,
 	getUpNewVideoBVidApi,
