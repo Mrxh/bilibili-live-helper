@@ -78,26 +78,26 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .gift-message {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
 
-  column-gap: 5px;
+	column-gap: 5px;
 
-  i {
-    &[class*="gift"] {
-      display: inline-block;
+	i {
+		&[class*="gift"] {
+			display: inline-block;
 
-      width: 25px;
-      height: 25px;
+			width: 25px;
+			height: 25px;
 
-      background-repeat: no-repeat;
-      background-size: cover;
-    }
-  }
+			background-repeat: no-repeat;
+			background-size: cover;
+		}
+	}
 
-  span {
-    color: var(--keyword-color);
-  }
+	span {
+		color: var(--keyword-color);
+	}
 }
 </style>

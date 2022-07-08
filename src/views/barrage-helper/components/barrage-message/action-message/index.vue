@@ -115,37 +115,37 @@ provide('barrage', barrage)
 
 <style scoped lang="scss">
 .action-message {
-  .grateful {
-    i {
-      color: var(--keyword-color);
-    }
-  }
+	.grateful {
+		i {
+			color: var(--keyword-color);
+		}
+	}
 
-  .enter {
-    display: flex;
-    overflow: hidden;
-    align-items: center;
+	.enter {
+		display: flex;
+		overflow: hidden;
+		align-items: center;
 
-    height: 40px;
-    padding-left: 5px;
+		height: 40px;
+		padding-left: 5px;
 
-    background-repeat: no-repeat;
-    background-position: -7px -25px;
-    background-size: 100% auto;
+		background-repeat: no-repeat;
+		background-position: -7px -25px;
+		background-size: 100% auto;
 
-    gap: 5px;
+		gap: 5px;
 
-    .avatar-image {
-      height: 34px;
+		.avatar-image {
+			height: 34px;
 
-      transform: translateY(0.5px);
+			transform: translateY(0.5px);
 
-      border-radius: 50%;
-    }
+			border-radius: 50%;
+		}
 
-    :not(img) {
-      transform: translateY(1px);
-    }
-  }
+		:not(img) {
+			transform: translateY(1px);
+		}
+	}
 }
 </style>

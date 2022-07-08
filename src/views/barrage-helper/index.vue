@@ -23,7 +23,7 @@ const isBottom = ref(true)
 const unreadCount = ref(0)
 // 计算出最新的一条欢迎信息
 const upToDateWelcome = computed(() => {
-  if (welcomeList.value.length == 0) {
+  if (!welcomeList.value.length) {
     return null
   }
   return welcomeList.value[welcomeList.value.length - 1]

@@ -128,7 +128,10 @@ const handleMusicTime = (time: number) => {
                   (value) => (currentBroadcastIndex = value)
                 "
               >
-                <a-carousel-item v-for="item in songPlayList">
+                <a-carousel-item
+                  v-for="item in songPlayList"
+                  :key="item.uid"
+                >
                   {{ item.uname }} 点了首 {{ item.musicName }}
                 </a-carousel-item>
               </a-carousel>

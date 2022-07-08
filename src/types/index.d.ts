@@ -2,7 +2,7 @@ import type { Component } from 'vue'
 
 export type Hash = '/' | '/settings' | '/fans' | '/music' | '/prompt';
 
-interface WindowSize {
+export interface WindowSize {
 	width: number;
 	height: number;
 }

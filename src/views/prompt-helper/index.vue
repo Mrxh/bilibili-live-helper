@@ -23,12 +23,12 @@ const onScroll = () => {
 
     timer = setInterval(() => {
       if (
-        listOuterRef.value?.scrollTop! >=
-        listInnerRef.value?.scrollHeight!
+				listOuterRef.value?.scrollTop! >=
+				listInnerRef.value?.scrollHeight!
       ) {
-        listOuterRef.value!.scrollTop = 0
+				listOuterRef.value!.scrollTop = 0
       } else {
-        listOuterRef.value!.scrollTop += 0.5
+				listOuterRef.value!.scrollTop += 0.5
       }
     }, 50)
   }, 0)
@@ -92,7 +92,10 @@ onMounted(() => {
             3.
             直播间发送以下指定关键词即可触发音效！(表情包也可以触发)
             <ol>
-              <li v-for="(item, index) in audioKeywords">
+              <li
+                v-for="(item, index) in audioKeywords"
+                :key="index"
+              >
                 {{ index + 1 }}. {{ item }}
               </li>
             </ol>

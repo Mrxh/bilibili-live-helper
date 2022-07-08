@@ -50,29 +50,29 @@ provide('barrage', barrage)
 
 <style scoped lang="scss">
 .general-message {
-  display: flex;
-  align-items: center;
+	display: flex;
+	align-items: center;
 
-  gap: 10px;
+	gap: 10px;
 
-  .message-medal,
-  .message-rank {
-    margin-right: 5px;
-  }
+	.message-medal,
+	.message-rank {
+		margin-right: 5px;
+	}
 
-  .text-message {
-    .message-rank {
-      transform: translateY(1px);
-    }
-  }
+	.text-message {
+		.message-rank {
+			transform: translateY(1px);
+		}
+	}
 
-  .emoji-message {
-    display: flex;
-    align-items: center;
+	.emoji-message {
+		display: flex;
+		align-items: center;
 
-    .message-rank {
-      transform: translateY(-1px);
-    }
-  }
+		.message-rank {
+			transform: translateY(-1px);
+		}
+	}
 }
 </style>

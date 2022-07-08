@@ -51,7 +51,10 @@ const openBrowser = (href?: string) => {
 
       <a-typography-paragraph blockquote>
         <ul>
-          <li v-for="item in connectList">
+          <li
+            v-for="(item, index) in connectList"
+            :key="index"
+          >
             {{ item.label }}：
             <a-typography-text copyable>
               <a-typography-text
@@ -87,19 +90,19 @@ const openBrowser = (href?: string) => {
 
 <style scoped lang="scss">
 .about-helper {
-  .arco-typography {
-    text-indent: 2em;
+	.arco-typography {
+		text-indent: 2em;
 
-    .arco-typography-primary:hover {
-      cursor: pointer;
-      text-decoration: underline;
-    }
-  }
+		.arco-typography-primary:hover {
+			cursor: pointer;
+			text-decoration: underline;
+		}
+	}
 
-  ul {
-    li {
-      text-indent: 0;
-    }
-  }
+	ul {
+		li {
+			text-indent: 0;
+		}
+	}
 }
 </style>

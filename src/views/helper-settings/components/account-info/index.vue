@@ -109,6 +109,7 @@ provide('handleSubmit', handleSubmit)
         v-for="item in formItem"
         :field="item.field"
         :required="item.required"
+        :key="item.field"
       >
         <template #label>
           <span>{{ prefixLabel }} {{ item.label }}</span>

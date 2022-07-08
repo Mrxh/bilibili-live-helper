@@ -30,14 +30,12 @@ const getAudioFiles = () => {
 
 // 播放音频
 const playAudio = async (file: string) => {
-  file = `${getAudioPath()}/${file}`
+  const filePath = `${getAudioPath()}/${file}`
 
-  console.log('file', file)
+  const data = Buffer.from(fs.readFileSync(filePath)).toString('base64')
 
   // 将文件转为 base64 格式
-  const base64: any = `data:${mineType.lookup(file)};base64,${new Buffer(
-    fs.readFileSync(file)
-  ).toString('base64')}`
+  const base64: any = `data:${mineType.lookup(filePath)};base64,${data}`
 
   // 创建一个 audio 对象
   const audio = new Audio()
