@@ -114,3 +114,22 @@ export interface NewVideoInfo {
 	reply: number;
 	danmaku: number;
 }
+
+export interface currentMusicInfo {
+	uid?: number;
+	uname?: string;
+	id: number;
+	name: string;
+	singer: string;
+	hasLyric: boolean;
+	lyric: string;
+	cover: string;
+	currentDuration: string;
+	totalDuration: string;
+}
+
+export interface SongPlayItem {
+	uid: number;
+	uname: string;
+	musicName: string;
+}

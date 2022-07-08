@@ -83,6 +83,7 @@ export const useWebsocketStore = defineStore({
 										// 普通弹幕信息
 										const info = item.info;
 
+										// TODO: 房管判断不准确
 										const barrageInfo: any = {
 											uid: info[2][0],
 											uname: info[2][1],
@@ -118,6 +119,7 @@ export const useWebsocketStore = defineStore({
 										const message =
 											barrageInfo.message.trim();
 										// 先判断是否触发音效
+										// TODO : 加判断是否开启了音效开关
 										const findAudio = getAudioFiles()?.find(
 											(item) =>
 												splitAudioSuffix(item).includes(
@@ -127,10 +129,7 @@ export const useWebsocketStore = defineStore({
 													splitAudioSuffix(item)
 												)
 										);
-
-										if (findAudio) {
-											playAudio(findAudio);
-										}
+										if (findAudio) playAudio(findAudio);
 
 										// 如果点|切歌操作，就通知音乐窗口
 										if (/^(点歌|切歌$)/.test(message)) {

@@ -1,7 +1,14 @@
-import { app, BrowserWindow, shell, ipcMain, nativeTheme } from "electron";
+import {
+	app,
+	BrowserWindow,
+	shell,
+	ipcMain,
+	nativeTheme,
+	Menu,
+} from "electron";
 import { release } from "os";
 import { join } from "path";
-import { windowName, windowOptions } from "./configure";
+import { windowName, windowOptions, menuTemplate } from "./configure";
 
 // Disable GPU Acceleration for Windows 7
 if (release().startsWith("6.1")) app.disableHardwareAcceleration();
@@ -22,7 +29,7 @@ export const ROOT_PATH = {
 	// /dist or /public
 	public: join(__dirname, app.isPackaged ? "../.." : "../../../public"),
 };
-
+// TODO：配置一套中文的 menu
 // Here, you can also use other preload
 const preload = join(__dirname, "../preload/index.js");
 // 🚧 Use ['ENV_NAME'] avoid vite:define plugin
@@ -55,7 +62,10 @@ const createWindow = (hash = "/") => {
 	});
 };
 
-app.whenReady().then(() => createWindow());
+app.whenReady().then(() => {
+	createWindow();
+	// Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
+});
 
 app.on("activate", () => {
 	const allWindows = BrowserWindow.getAllWindows();
