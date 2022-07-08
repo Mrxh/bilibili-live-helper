@@ -23,14 +23,6 @@ const isBottom = ref(true);
 const unreadCount = ref(0);
 
 onMounted(async () => {
-	// 初始化信息
-	const result = await initInfo();
-
-	if (!result) return;
-
-	// 初始话成功，开启长链接
-	openWebsocket();
-
 	// 监听透明度的变化
 	ipcRenderer.on("listen-window-opacity", (_, value) => {
 		opacity.value = value;
@@ -40,6 +32,14 @@ onMounted(async () => {
 	ipcRenderer.on("listen-up-info", () => {
 		window.location.reload();
 	});
+
+	// 初始化信息
+	const result = await initInfo();
+
+	if (!result) return;
+
+	// 初始话成功，开启长链接
+	openWebsocket();
 
 	// 初始化开启跟随直播助手一起开启的窗口
 	const otherTools: Record<keyof typeof TOOLS_OPEN, Hash> = {

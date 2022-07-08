@@ -86,7 +86,8 @@ const handleSubmit = (values: Record<string, any>) => {
 
 	if (isChange) {
 		getFromValue();
-		changeUpInfo(values.uid);
+
+		isAnchor && changeUpInfo();
 	}
 
 	Message.success("保存成功");

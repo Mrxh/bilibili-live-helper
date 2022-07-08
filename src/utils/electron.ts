@@ -41,8 +41,8 @@ const toggleWindowTheme = (value: "dark" | "light") => {
 };
 
 // up 的登录信息发生变化给主进程发送消息
-const changeUpInfo = (uid: number) => {
-	ipcRenderer.send("up-info-change", uid);
+const changeUpInfo = () => {
+	ipcRenderer.send("up-info-change");
 };
 
 // 更改窗口的大小

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { penetrateWindow } from "@/utils/electron";
 import useMusicInfo from "@/hooks/useMusicInfo";
-import dayjs from "dayjs";
 
 const {
 	currentPlaySong,
@@ -9,6 +8,8 @@ const {
 	currentBroadcastIndex,
 	cutSongList,
 	coverElement,
+	isPlay,
+	playMusic,
 } = useMusicInfo();
 </script>
 
@@ -21,16 +22,30 @@ const {
 			@mouseleave="penetrateWindow(false)"
 		></div>
 		<!-- 音乐图片 -->
-		<a-avatar :size="75">
+		<div class="music-cover">
 			<span v-if="!currentPlaySong?.cover">歌曲图片</span>
 
-			<img
-				ref="coverElement"
-				:src="currentPlaySong?.cover"
-				:alt="currentPlaySong?.name"
-				v-else
-			/>
-		</a-avatar>
+			<template v-else>
+				<img
+					ref="coverElement"
+					:src="currentPlaySong?.cover"
+					:alt="currentPlaySong?.name"
+				/>
+
+				<!-- 音乐操作 -->
+				<div class="operate">
+					<!-- 播放图标 -->
+					<icon-pause-circle-fill
+						v-if="isPlay"
+						@click="isPlay = false"
+					/>
+					<!-- 暂停图标 -->
+					<icon-play-circle-fill v-else @click="isPlay = true" />
+					<!-- 下一曲 -->
+					<icon-skip-next-fill @click="playMusic" />
+				</div>
+			</template>
+		</div>
 		<!-- 主要内容部分 -->
 		<div class="content">
 			<template v-if="currentPlaySong">
@@ -41,13 +56,19 @@ const {
 					<!-- 歌手 -->
 					<div class="singer">{{ currentPlaySong?.singer }}</div>
 				</div>
-				<!-- 切歌 -->
-				<div class="cut-song">
-					切歌 <span>{{ cutSongList.length }}</span> / 3
+				<!-- 切歌 and 时间 -->
+				<div class="aaa">
+					<div class="cut-song">
+						切歌 <span>{{ cutSongList.length }}</span> / 3
+					</div>
+					<div class="music-time">
+						{{ currentPlaySong?.currentDuration }} /
+						{{ currentPlaySong?.totalDuration }}
+					</div>
 				</div>
+
 				<!-- 歌词 -->
-				<!-- <div class="lyric">{{ currentPlaySong?.lyric }}</div> -->
-				<div class="lyric">我正在做歌词显示</div>
+				<div class="lyric">{{ currentPlaySong?.lyric }}</div>
 				<!-- 点歌列表 -->
 				<div class="song-list">
 					<div class="has-song" v-if="songPlayList.length">

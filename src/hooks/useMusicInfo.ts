@@ -1,5 +1,6 @@
 import { onMounted, ref, watch } from "vue";
 import { ipcRenderer } from "electron";
+import Lyric from "lrc-file-parser";
 import {
 	searchPlaylistInfoApi,
 	searchMusicInfoApi,
@@ -14,6 +15,8 @@ const useMusicInfo = () => {
 	const currentPlaySong = ref<currentMusicInfo>();
 	// 音量
 	const volume = ref<number>(0.2);
+	// 音乐是否播放
+	const isPlay = ref<boolean>(false);
 	// 随机播放歌单列表
 	const randomPlayList = ref<any[]>([]);
 	// 点歌的歌单列表
@@ -54,9 +57,34 @@ const useMusicInfo = () => {
 		return timeArray.map((item) => item.padStart(2, "0")).join(":");
 	};
 
+	// 处理歌词
+	const handleLyric = (lyric: string) => {
+		const lrc = new Lyric({
+			onPlay(line, text) {
+				console.log(line, text);
+				currentPlaySong.value!.lyric = text as string;
+			},
+			offset: 150,
+			isRemoveBlankLine: true,
+			lyric,
+			translationLyric: "",
+			onSetLyric(lines) {
+				console.log("lines", lines);
+			},
+		});
+
+		lrc.setLyric(lyric);
+
+		return lrc;
+	};
+
 	// 播放音乐
 	const playMusic = async () => {
 		try {
+			if (songPlayList.value.length <= 1) {
+				currentBroadcastIndex.value = 1;
+			}
+
 			let info: any = {};
 
 			if (songPlayList.value.length) {
@@ -117,7 +145,6 @@ const useMusicInfo = () => {
 				currentDuration: "00:00",
 				totalDuration: handleMusicTime(Math.floor(dt / 1000)),
 				hasLyric,
-				lyric,
 			};
 
 			audio.src = `http://music.163.com/song/media/outer/url?id=${id}.mp3`;
@@ -126,6 +153,8 @@ const useMusicInfo = () => {
 			// 可以正常播放且无需停顿时播放音乐
 			audio.oncanplaythrough = () => {
 				audio.play();
+				handleLyric(lyric).play(0);
+				isPlay.value = true;
 
 				// 监听音乐时间变化
 				audio.ontimeupdate = () => {
@@ -138,6 +167,7 @@ const useMusicInfo = () => {
 			// 播放完后去找下一首音乐
 			audio.onended = () => {
 				playMusic();
+				isPlay.value = false;
 			};
 		} catch (error) {
 			// 播放失败重新换一首播放
@@ -146,16 +176,12 @@ const useMusicInfo = () => {
 		}
 	};
 
-	// 改变音乐播放状态
-	const changeMusicStatus = async () => {};
-
 	onMounted(() => {
-		getRandomPlayList();
-
 		// 监听点|切歌消息
 		ipcRenderer.on("listen-sone-barrage", (_, barrage) => {
 			const { message, uname, uid } = barrage;
 			// 点歌操作
+			// TODO: 加个歌曲黑名单 lost rivers Early Steps
 			if (message.includes("点歌")) {
 				const musicName = message.replace("点歌", "").trim();
 				// 如果歌曲名为空，无操作
@@ -165,13 +191,28 @@ const useMusicInfo = () => {
 			} else {
 				// 切歌操作
 				cutSongList.value = [...new Set([...cutSongList.value, uid])];
+				// TODO: 切歌操作设置为置顶人数
+				if (cutSongList.value.length >= 3) {
+					playMusic();
+					cutSongList.value.splice(0);
+				}
 			}
 		});
+
+		getRandomPlayList();
 	});
 
-	watch(cutSongList.value, (newValue) => {
-		// TODO: 与设置参数同步起来
-		if (newValue.length === 3) playMusic();
+	watch(isPlay, (newValue) => {
+		console.log("newValue", newValue);
+		if (newValue) {
+			// TODO: 歌词播放暂停
+			audio.play();
+			// handleLyric()?.play(0);
+			coverElement.value!.style.animationPlayState = "running";
+		} else {
+			audio.pause();
+			coverElement.value!.style.animationPlayState = "paused";
+		}
 	});
 
 	return {
@@ -180,6 +221,8 @@ const useMusicInfo = () => {
 		currentBroadcastIndex,
 		cutSongList,
 		coverElement,
+		isPlay,
+		playMusic,
 	};
 };
 

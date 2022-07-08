@@ -122,7 +122,7 @@ export interface currentMusicInfo {
 	name: string;
 	singer: string;
 	hasLyric: boolean;
-	lyric: string;
+	lyric?: string;
 	cover: string;
 	currentDuration: string;
 	totalDuration: string;

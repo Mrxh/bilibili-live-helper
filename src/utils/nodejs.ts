@@ -32,6 +32,8 @@ const getAudioFiles = () => {
 const playAudio = async (file: string) => {
 	file = `${getAudioPath()}/${file}`;
 
+	console.log("file", file);
+
 	// 将文件转为 base64 格式
 	let base64: any = `data:${mineType.lookup(file)};base64,${new Buffer(
 		fs.readFileSync(file)

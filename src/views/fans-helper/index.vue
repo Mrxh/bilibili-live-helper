@@ -80,17 +80,17 @@ const getVideoInfo = async () => {
 };
 
 onMounted(() => {
+	// 监听 up uid的变化，然后重新刷新窗口
+	ipcRenderer.on("listen-up-info", () => {
+		window.location.reload();
+	});
+
 	getVideoInfo();
 
 	// 每五秒获取一下最新数据
 	setInterval(() => {
 		getVideoInfo();
 	}, 5000);
-
-	// 监听 up uid的变化，然后重新刷新窗口
-	ipcRenderer.on("listen-up-info", () => {
-		window.location.reload();
-	});
 });
 
 // 监听 isExpand 的变化，更改窗口大小
