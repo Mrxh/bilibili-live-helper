@@ -72,6 +72,11 @@
 			font-size: 32px;
 
 			-webkit-app-region: no-drag;
+
+			svg:hover {
+				color: rgba(224, 99, 26, 1);
+				transition: 0.5s;
+			}
 		}
 
 		&:hover {
@@ -84,6 +89,7 @@
 			from {
 				transform: rotate(0);
 			}
+
 			to {
 				transform: rotate(360deg);
 			}
@@ -120,6 +126,7 @@
 				text-align: center;
 
 				gap: 10px;
+
 				.name,
 				.singer {
 					overflow: hidden;
@@ -156,28 +163,33 @@
 				text-align: center;
 
 				line-height: 20px;
+
 				.has-song {
 					display: flex;
 					justify-content: space-between;
 
 					height: 100%;
+
 					::v-deep(.arco-carousel) {
 						flex: 1;
 
 						height: 100%;
+
 						.arco-carousel-slide {
-							> div {
+							>div {
 								overflow: hidden;
 
 								white-space: nowrap;
 								text-overflow: ellipsis;
 
 								opacity: 0;
+
 								&.arco-carousel-item-current {
 									opacity: 1;
 								}
 							}
 						}
+
 						.arco-carousel-indicator-wrapper {
 							display: none;
 						}
@@ -202,6 +214,7 @@
 				.arco-spin-icon {
 					color: #fff;
 				}
+
 				.arco-spin-tip {
 					color: #fff;
 
@@ -224,11 +237,12 @@
 
 		&::before {
 			background: inherit;
-
+			box-shadow: inset 0 0 0 3000px rgba(255, 255, 255, 0.2);
 			filter: blur(2px);
 		}
+
 		&::after {
-			background-color: rgba(0, 0, 0, 0.5);
+			background-color: rgba(0, 0, 0, 0.7);
 		}
 	}
 }
