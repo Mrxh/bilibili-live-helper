@@ -124,8 +124,8 @@ export interface currentMusicInfo {
 	hasLyric: boolean;
 	lyric?: string;
 	cover: string;
-	currentDuration: string;
-	totalDuration: string;
+	currentDuration: number;
+	totalDuration: number;
 }
 
 export interface SongPlayItem {

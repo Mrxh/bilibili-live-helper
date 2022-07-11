@@ -9,10 +9,13 @@
 
 	.header {
 		height: 20px;
+
+		background-color: transparent;
 	}
 
 	.music-cover {
 		position: absolute;
+		z-index: 99;
 		top: 0;
 		left: 20px;
 
@@ -67,6 +70,8 @@
 			background-color: rgba(0, 0, 0, 0.6);
 
 			font-size: 32px;
+
+			-webkit-app-region: no-drag;
 		}
 
 		&:hover {
@@ -86,109 +91,144 @@
 	}
 
 	.content {
+		position: relative;
+
+		overflow: hidden;
+
 		height: calc(100% - 20px);
-		padding: 20px;
 
 		border-radius: 10px;
-		background-color: #fff;
+		background-position: center;
+		background-size: cover;
 
-		.music-info {
-			display: flex;
-			flex-direction: column;
+		.inner-content {
+			position: absolute;
+			z-index: 10;
 
-			padding-left: 95px;
+			width: 100%;
+			height: 100%;
+			padding: 15px 20px;
 
-			text-align: center;
+			color: #fff;
 
-			gap: 10px;
-			div {
+			.music-info {
+				display: flex;
+				flex-direction: column;
+
+				padding-left: 95px;
+
+				text-align: center;
+
+				gap: 10px;
+				.name,
+				.singer {
+					overflow: hidden;
+
+					white-space: nowrap;
+					text-overflow: ellipsis;
+				}
+
+				.name {
+					font-size: 15px;
+				}
+			}
+
+			.other-info {
+				display: flex;
+				justify-content: space-between;
+
+				margin-top: 10px;
+			}
+
+			.lyric {
 				overflow: hidden;
 
+				margin: 10px 0;
+
+				text-align: center;
 				white-space: nowrap;
 				text-overflow: ellipsis;
 			}
 
-			.name {
-				font-size: 15px;
-			}
-		}
-
-		.aaa {
-			display: flex;
-			justify-content: space-between;
-
-			.cut-song {
-				width: 75px;
-				margin-top: 5px;
+			.song-list {
+				height: 20px;
 
 				text-align: center;
-				span {
-					color: rgb(var(--arcoblue-6));
-				}
-			}
-		}
 
-		.lyric {
-			overflow: hidden;
-
-			margin: 10px 0;
-
-			text-align: center;
-			white-space: nowrap;
-			text-overflow: ellipsis;
-		}
-
-		.song-list {
-			height: 20px;
-
-			text-align: center;
-
-			line-height: 20px;
-			.has-song {
-				display: flex;
-				justify-content: space-between;
-
-				height: 100%;
-				::v-deep(.arco-carousel) {
-					flex: 1;
+				line-height: 20px;
+				.has-song {
+					display: flex;
+					justify-content: space-between;
 
 					height: 100%;
-					.arco-carousel-slide {
-						> div {
-							overflow: hidden;
+					::v-deep(.arco-carousel) {
+						flex: 1;
 
-							white-space: nowrap;
-							text-overflow: ellipsis;
+						height: 100%;
+						.arco-carousel-slide {
+							> div {
+								overflow: hidden;
 
-							background-color: #fff;
+								white-space: nowrap;
+								text-overflow: ellipsis;
+
+								opacity: 0;
+								&.arco-carousel-item-current {
+									opacity: 1;
+								}
+							}
+						}
+						.arco-carousel-indicator-wrapper {
+							display: none;
 						}
 					}
-					.arco-carousel-indicator-wrapper {
-						display: none;
-					}
 				}
-				em {
-					color: rgb(var(--arcoblue-6));
+
+				.no-song {
+					color: var(--color-text-3);
 				}
 			}
 
-			.no-song {
-				color: var(--color-text-3);
+			::v-deep(.arco-spin) {
+				display: flex;
+				align-items: center;
+				flex-direction: column;
+				justify-content: center;
+
+				height: 100%;
+
+				font-size: 16px;
+
+				.arco-spin-icon {
+					color: #fff;
+				}
+				.arco-spin-tip {
+					color: #fff;
+
+					font-size: 15px;
+				}
 			}
 		}
 
-		.arco-spin {
-			display: flex;
-			align-items: center;
-			flex-direction: column;
-			justify-content: center;
+		&::before,
+		&::after {
+			position: absolute;
+			top: 0;
+			left: 0;
 
+			width: 100%;
 			height: 100%;
 
-			font-size: 16px;
-			::v-deep(.arco-spin-tip) {
-				font-size: 15px;
-			}
+			content: "";
+		}
+
+		&::before {
+			background: inherit;
+
+			filter: blur(2px);
+		}
+		&::after {
+			background-color: rgba(0, 0, 0, 0.5);
 		}
 	}
 }

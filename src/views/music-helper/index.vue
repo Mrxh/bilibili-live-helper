@@ -11,6 +11,23 @@ const {
 	isPlay,
 	playMusic,
 } = useMusicInfo();
+
+// 处理音乐时间
+const handleMusicTime = (time: number) => {
+	const timeArray: string[] = [];
+
+	for (let index = 2; index >= 0; index--) {
+		const currentTime = Math.floor(time / 60 ** index).toString();
+
+		timeArray.push(currentTime);
+
+		time -= +currentTime * 60 ** index;
+	}
+
+	if (!+timeArray[0]) timeArray.shift();
+
+	return timeArray.map((item) => item.padStart(2, "0")).join(":");
+};
 </script>
 
 <template>
@@ -47,58 +64,81 @@ const {
 			</template>
 		</div>
 		<!-- 主要内容部分 -->
-		<div class="content">
-			<template v-if="currentPlaySong">
-				<!-- 音乐信息 -->
-				<div class="music-info">
-					<!-- 音乐名称 -->
-					<div class="name">{{ currentPlaySong?.name }}</div>
-					<!-- 歌手 -->
-					<div class="singer">{{ currentPlaySong?.singer }}</div>
-				</div>
-				<!-- 切歌 and 时间 -->
-				<div class="aaa">
-					<div class="cut-song">
-						切歌 <span>{{ cutSongList.length }}</span> / 3
+		<div
+			class="content"
+			:style="{
+				backgroundImage: `url(${currentPlaySong?.cover})`,
+			}"
+		>
+			<div class="inner-content">
+				<template v-if="currentPlaySong">
+					<!-- 音乐信息 -->
+					<div class="music-info">
+						<!-- 音乐名称 -->
+						<div class="name">{{ currentPlaySong?.name }}</div>
+						<!-- 歌手 -->
+						<div class="singer">{{ currentPlaySong?.singer }}</div>
 					</div>
-					<div class="music-time">
-						{{ currentPlaySong?.currentDuration }} /
-						{{ currentPlaySong?.totalDuration }}
-					</div>
-				</div>
-
-				<!-- 歌词 -->
-				<div class="lyric">{{ currentPlaySong?.lyric }}</div>
-				<!-- 点歌列表 -->
-				<div class="song-list">
-					<div class="has-song" v-if="songPlayList.length">
-						<a-carousel
-							direction="vertical"
-							show-arrow="never"
-							auto-play
-							@change="(value) => (currentBroadcastIndex = value)"
-						>
-							<a-carousel-item v-for="item in songPlayList">
-								<em>{{ item.uname }}</em> 点了首
-								<em>{{ item.musicName }}</em>
-							</a-carousel-item>
-						</a-carousel>
-
-						<span>
-							<em>{{ currentBroadcastIndex }}</em> /
-							{{ songPlayList.length }}
-						</span>
+					<!-- 切歌 and 时间 -->
+					<div class="other-info">
+						<div class="cut-song">
+							切歌 {{ cutSongList.length }} / 3
+						</div>
+						<div class="music-time">
+							{{
+								handleMusicTime(
+									currentPlaySong?.currentDuration
+								)
+							}}
+							/
+							{{
+								handleMusicTime(currentPlaySong?.totalDuration)
+							}}
+						</div>
 					</div>
 
-					<div class="no-song" v-else>暂无观众姥爷点歌</div>
-				</div>
-			</template>
+					<!-- 歌词 -->
+					<div class="lyric">
+						<template v-if="!currentPlaySong?.lyric">
+							歌词正在加载中...
+						</template>
+						<template v-else>
+							{{ currentPlaySong?.lyric }}
+						</template>
+					</div>
+					<!-- 点歌列表 -->
+					<div class="song-list">
+						<div class="has-song" v-if="songPlayList.length">
+							<a-carousel
+								direction="vertical"
+								show-arrow="never"
+								auto-play
+								:current="currentBroadcastIndex"
+								@change="
+									(value) => (currentBroadcastIndex = value)
+								"
+							>
+								<a-carousel-item v-for="item in songPlayList">
+									{{ item.uname }} 点了首 {{ item.musicName }}
+								</a-carousel-item>
+							</a-carousel>
 
-			<a-spin
-				tip="初始化点歌助手，将随机播放热门歌曲"
-				:size="32"
-				v-else
-			/>
+							<span>
+								{{ currentBroadcastIndex }} /
+								{{ songPlayList.length }}
+							</span>
+						</div>
+
+						<div class="no-song" v-else>暂无观众姥爷点歌</div>
+					</div>
+				</template>
+
+				<a-spin
+					tip="初始化点歌助手，将随机播放热门歌曲"
+					:size="32"
+					v-else
+				/>
+			</div>
 		</div>
 	</div>
 </template>

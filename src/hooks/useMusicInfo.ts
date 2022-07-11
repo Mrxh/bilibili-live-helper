@@ -27,6 +27,8 @@ const useMusicInfo = () => {
 	const cutSongList = ref<number[]>([]);
 	// 音乐图片元素
 	const coverElement = ref<HTMLImageElement>();
+	// 处理歌词的对象
+	const lyricTools = ref<any>();
 
 	// 获取随机歌单列表
 	const getRandomPlayList = async () => {
@@ -40,140 +42,114 @@ const useMusicInfo = () => {
 		playMusic();
 	};
 
-	// 处理音乐时间
-	const handleMusicTime = (time: number) => {
-		const timeArray: string[] = [];
-
-		for (let index = 2; index >= 0; index--) {
-			const currentTime = Math.floor(time / 60 ** index).toString();
-
-			timeArray.push(currentTime);
-
-			time -= +currentTime * 60 ** index;
-		}
-
-		if (!+timeArray[0]) timeArray.shift();
-
-		return timeArray.map((item) => item.padStart(2, "0")).join(":");
-	};
-
 	// 处理歌词
 	const handleLyric = (lyric: string) => {
-		const lrc = new Lyric({
+		lyricTools.value = new Lyric({
 			onPlay(line, text) {
-				console.log(line, text);
 				currentPlaySong.value!.lyric = text as string;
 			},
 			offset: 150,
 			isRemoveBlankLine: true,
 			lyric,
 			translationLyric: "",
-			onSetLyric(lines) {
-				console.log("lines", lines);
-			},
+			onSetLyric(lines) {},
 		});
 
-		lrc.setLyric(lyric);
-
-		return lrc;
+		lyricTools.value.setLyric(lyric);
 	};
 
 	// 播放音乐
 	const playMusic = async () => {
-		try {
-			if (songPlayList.value.length <= 1) {
-				currentBroadcastIndex.value = 1;
-			}
+		isPlay.value = false;
 
-			let info: any = {};
+		let info: any = {};
 
-			if (songPlayList.value.length) {
-				const { uid, uname, musicName } = songPlayList.value[0];
+		if (songPlayList.value.length) {
+			const { uid, uname, musicName } = songPlayList.value[0];
 
-				// 获取点歌列表第一首的信息
-				const getMusicInfo = await searchMusicInfoApi(musicName);
+			// 获取点歌列表第一首的信息
+			const getMusicInfo = await searchMusicInfoApi(musicName);
 
-				if (!getMusicInfo) return;
-
-				// 将用户信息也放进去，播放失败可以发消息让换一首歌曲
-				info = { uid, uname, ...getMusicInfo.result.songs[0] };
-
-				// 删除掉列表第一首
-				songPlayList.value.shift();
-			} else if (randomPlayList.value.length) {
-				// 随机获取一首歌曲
-				info =
-					randomPlayList.value[
-						Math.floor(Math.random() * randomPlayList.value.length)
-					];
-
-				// 从随机歌单中删除
-				const findIndex = randomPlayList.value.find(
-					(item) => item.id === info.id
-				);
-				randomPlayList.value.splice(findIndex, 1);
-			} else {
-				getRandomPlayList();
+			if (!getMusicInfo) {
+				playMusic();
 
 				return;
 			}
 
-			const { uid, uname, id, name, al, ar, dt } = info;
+			// 将用户信息也放进去，播放失败可以发消息让换一首歌曲
+			info = { uid, uname, ...getMusicInfo.result.songs[0] };
 
-			// 获取歌词
-			const getLyric = await searchLyricApi(id);
+			// 删除掉列表第一首
+			songPlayList.value.shift();
+		} else if (randomPlayList.value.length) {
+			// 随机获取一首歌曲
+			info =
+				randomPlayList.value[
+					Math.floor(Math.random() * randomPlayList.value.length)
+				];
 
-			if (!getLyric) return;
+			// 从随机歌单中删除
+			const findIndex = randomPlayList.value.findIndex(
+				(item) => item.id === info.id
+			);
+			randomPlayList.value.splice(findIndex, 1);
+		} else {
+			getRandomPlayList();
 
-			let hasLyric = false,
-				lyric = "纯音乐，请欣赏";
-
-			// needDesc 为 true 无歌词 反之
-			if (!getLyric?.needDesc) {
-				hasLyric = true;
-
-				lyric = getLyric.lrc.lyric;
-			}
-
-			currentPlaySong.value = {
-				uid,
-				uname,
-				id,
-				name,
-				singer: ar.map((item: any) => item.name).join(" / "),
-				cover: al.picUrl,
-				currentDuration: "00:00",
-				totalDuration: handleMusicTime(Math.floor(dt / 1000)),
-				hasLyric,
-			};
-
-			audio.src = `http://music.163.com/song/media/outer/url?id=${id}.mp3`;
-			audio.volume = volume.value;
-
-			// 可以正常播放且无需停顿时播放音乐
-			audio.oncanplaythrough = () => {
-				audio.play();
-				handleLyric(lyric).play(0);
-				isPlay.value = true;
-
-				// 监听音乐时间变化
-				audio.ontimeupdate = () => {
-					currentPlaySong.value!.currentDuration = handleMusicTime(
-						audio.currentTime
-					);
-				};
-			};
-
-			// 播放完后去找下一首音乐
-			audio.onended = () => {
-				playMusic();
-				isPlay.value = false;
-			};
-		} catch (error) {
-			// 播放失败重新换一首播放
-			playMusic();
-			// TODO: 如果是点歌的 需要版权啥的音乐，给用户发信息提示
+			return;
 		}
+
+		if (songPlayList.value.length <= 1) {
+			currentBroadcastIndex.value = 1;
+		}
+
+		const { uid, uname, id, name, al, ar, dt } = info;
+
+		// 获取歌词
+		const getLyric = await searchLyricApi(id);
+
+		if (!getLyric) return;
+
+		let hasLyric = false,
+			lyric = "纯音乐，请欣赏";
+
+		// needDesc 为 true 无歌词 反之
+		if (!getLyric?.needDesc) {
+			hasLyric = true;
+
+			lyric = getLyric.lrc.lyric;
+		}
+
+		currentPlaySong.value = {
+			uid,
+			uname,
+			id,
+			name,
+			singer: ar.map((item: any) => item.name).join(" / "),
+			cover: al.picUrl,
+			currentDuration: 0,
+			totalDuration: dt.toString().slice(0, -3),
+			hasLyric,
+		};
+
+		audio.src = `http://music.163.com/song/media/outer/url?id=${id}.mp3`;
+		audio.volume = volume.value;
+
+		// 可以正常播放且无需停顿时播放音乐
+		audio.oncanplaythrough = () => {
+			isPlay.value = true;
+			handleLyric(lyric);
+		};
+
+		// 监听音乐时间变化
+		audio.ontimeupdate = () => {
+			currentPlaySong.value!.currentDuration = audio.currentTime;
+		};
+
+		// 播放完后去找下一首音乐
+		audio.onended = () => {
+			playMusic();
+		};
 	};
 
 	onMounted(() => {
@@ -203,15 +179,22 @@ const useMusicInfo = () => {
 	});
 
 	watch(isPlay, (newValue) => {
-		console.log("newValue", newValue);
-		if (newValue) {
-			// TODO: 歌词播放暂停
-			audio.play();
-			// handleLyric()?.play(0);
-			coverElement.value!.style.animationPlayState = "running";
-		} else {
-			audio.pause();
-			coverElement.value!.style.animationPlayState = "paused";
+		try {
+			if (newValue) {
+				audio.play();
+				lyricTools.value.play(
+					currentPlaySong.value!.currentDuration * 1000
+				);
+				coverElement.value!.style.animationPlayState = "running";
+			} else {
+				audio.pause();
+				lyricTools.value.pause();
+				coverElement.value!.style.animationPlayState = "paused";
+			}
+		} catch (error) {
+			console.log("error", error);
+			// 播放失败重新换一首播放
+			playMusic();
 		}
 	});
 
