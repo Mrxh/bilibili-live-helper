@@ -118,6 +118,20 @@
 
 			color: #fff;
 
+			.volume {
+				position: absolute;
+				top: 5px;
+				right: 5px;
+
+				transition: all 0.3s;
+
+				opacity: 0;
+				color: var(--color-text-3);
+				&.show {
+					opacity: 1;
+				}
+			}
+
 			.music-info {
 				display: flex;
 				flex-direction: column;
