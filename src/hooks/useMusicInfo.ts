@@ -160,6 +160,11 @@ const useMusicInfo = () => {
       currentPlaySong.value!.currentDuration = audio.currentTime
     }
 
+    // 加载错误时播放下一首
+    audio.onerror = () => {
+      playMusic()
+    }
+
     // 播放完后去找下一首音乐
     audio.onended = () => {
       playMusic()
@@ -193,18 +198,12 @@ const useMusicInfo = () => {
   })
 
   watch(isPlay, (newValue) => {
-    try {
-      if (newValue) {
-        audio.play()
-        lyricTools.value.play(currentPlaySong.value!.currentDuration * 1000)
-      } else {
-        audio.pause()
-        lyricTools.value.pause()
-      }
-    } catch (error) {
-      console.log('error', error)
-      // 播放失败重新换一首播放
-      playMusic()
+    if (newValue) {
+      audio.play()
+      lyricTools.value.play(currentPlaySong.value!.currentDuration * 1000)
+    } else {
+      audio.pause()
+      lyricTools.value.pause()
     }
   })
 
