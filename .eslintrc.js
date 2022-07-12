@@ -19,6 +19,7 @@ module.exports = {
 		"no-case-declarations": "off",
 		"vue/no-setup-props-destructure": "off",
 		"prefer-promise-reject-errors": "off",
+		"no-mixed-spaces-and-tabs": "off",
 	},
 	globals: {
 		NodeJS: true,

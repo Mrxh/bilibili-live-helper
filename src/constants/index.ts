@@ -4,6 +4,8 @@ const THEME = 'theme'
 
 const OPACITY = 'opacity'
 
+const Volume = 'volume'
+
 const IS_TOP: Partial<Record<Hash, string>> = {
   '/': 'is_top./',
   '/fans': 'is_top./fans',
@@ -47,6 +49,7 @@ const BARRAGE_SOUND = {
 export {
   THEME,
   OPACITY,
+  Volume,
   IS_TOP,
   IS_PENETRATE,
   UP_INFO,

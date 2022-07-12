@@ -7,6 +7,8 @@ import {
   searchLyricApi,
   getMusicUrl
 } from '@/api'
+import { Volume } from '@/constants'
+import { getStore, setStore } from '@/stores/electron'
 import type { currentMusicInfo, SongPlayItem } from '@/types'
 
 const useMusicInfo = () => {
@@ -15,7 +17,7 @@ const useMusicInfo = () => {
   // 正在播放的音乐信息
   const currentPlaySong = ref<currentMusicInfo>()
   // 音量
-  const volume = ref<number>(0)
+  const volume = ref<number>(getStore(Volume))
   // 音乐是否播放
   const isPlay = ref<boolean>(false)
   // 随机播放歌单列表
@@ -54,13 +56,13 @@ const useMusicInfo = () => {
   const handleLyric = (lyric: string) => {
     lyricTools.value = new Lyric({
       onPlay (line, text) {
-        currentPlaySong.value!.lyric = text as string
+				currentPlaySong.value!.lyric = text as string
       },
       offset: 150,
       isRemoveBlankLine: true,
       lyric,
       translationLyric: '',
-      onSetLyric (lines) { }
+      onSetLyric (lines) {}
     })
 
     lyricTools.value.setLyric(lyric)
@@ -94,9 +96,9 @@ const useMusicInfo = () => {
     } else if (randomPlayList.value.length) {
       // 随机获取一首歌曲
       info =
-        randomPlayList.value[
-          Math.floor(Math.random() * randomPlayList.value.length)
-        ]
+				randomPlayList.value[
+				  Math.floor(Math.random() * randomPlayList.value.length)
+				]
 
       // 从随机歌单中删除
       const findIndex = randomPlayList.value.findIndex(
@@ -145,7 +147,7 @@ const useMusicInfo = () => {
       totalDuration: +dt.toString().slice(0, -3),
       hasLyric
     }
-
+    console.log('volume.value', volume.value)
     audio.src = getMusicUrl(id)
     audio.volume = volume.value
 
@@ -157,8 +159,8 @@ const useMusicInfo = () => {
 
     // 监听音乐时间变化
     audio.ontimeupdate = () => {
-      currentPlaySong.value!.currentDuration = audio.currentTime
-      musicProgress.value = audio.currentTime
+			currentPlaySong.value!.currentDuration = audio.currentTime
+			musicProgress.value = audio.currentTime
     }
 
     // 加载错误时播放下一首
@@ -178,6 +180,18 @@ const useMusicInfo = () => {
 
     audio.currentTime = time
     musicProgress.value = time
+  }
+
+  // 处理音量
+  const handleVolume = (event: WheelEvent) => {
+    const sign = event.deltaY > 0 ? 1 : -1
+    const target = Number((audio.volume + sign * 0.01).toFixed(2))
+
+    audio.volume = sign > 0 ? Math.min(1, target) : Math.max(0, target)
+
+    volume.value = audio.volume
+
+    setStore(Volume, volume.value)
   }
 
   onMounted(() => {
@@ -210,7 +224,7 @@ const useMusicInfo = () => {
     if (newValue) {
       audio.play()
       lyricTools.value.play(
-        currentPlaySong.value!.currentDuration * 1000
+				currentPlaySong.value!.currentDuration * 1000
       )
     } else {
       audio.pause()
@@ -227,7 +241,8 @@ const useMusicInfo = () => {
     coverStyle,
     playMusic,
     musicProgress,
-    handleProgress
+    handleProgress,
+    handleVolume
   }
 }
 

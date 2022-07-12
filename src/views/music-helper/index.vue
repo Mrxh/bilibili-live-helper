@@ -11,7 +11,8 @@ const {
   coverStyle,
   playMusic,
   musicProgress,
-  handleProgress
+  handleProgress,
+  handleVolume
 } = useMusicInfo()
 
 // 处理音乐时间
@@ -33,7 +34,10 @@ const handleMusicTime = (time: number) => {
 </script>
 
 <template>
-  <div class="music-helper">
+  <div
+    class="music-helper"
+    @wheel="handleVolume"
+  >
     <!-- header 顶部是用来让透明的部分可穿透 -->
     <div
       class="header"

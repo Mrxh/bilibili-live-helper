@@ -1,5 +1,5 @@
 import Store from "electron-store";
-import { THEME, UP_INFO, IS_TOP, OPACITY } from "@/constants";
+import { THEME, UP_INFO, IS_TOP, OPACITY, Volume } from "@/constants";
 
 const store = new Store();
 
@@ -23,6 +23,9 @@ const getStore = (key: string, isDecrypt = true) => {
 	} else if (key === OPACITY) {
 		// 直播助手 默认透明度 0 - 100
 		defaultValue = 70;
+	} else if (key === Volume) {
+		// 音乐助手默认音量 0 - 1
+		defaultValue = 0.2;
 	} else if (key.includes("barrage_show")) {
 		// 显示列表样式的默认选择状态
 		defaultValue = true;
