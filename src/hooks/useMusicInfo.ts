@@ -69,6 +69,8 @@ const useMusicInfo = () => {
   const playMusic = async () => {
     isPlay.value = false
 
+    if (currentPlaySong.value?.cover) currentPlaySong.value!.cover = ''
+
     let info: any = {}
 
     if (songPlayList.value.length) {
