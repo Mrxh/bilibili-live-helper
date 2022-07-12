@@ -7,8 +7,8 @@ const {
   songPlayList,
   currentBroadcastIndex,
   cutSongList,
-  coverElement,
   isPlay,
+  coverStyle,
   playMusic
 } = useMusicInfo()
 
@@ -28,6 +28,7 @@ const handleMusicTime = (time: number) => {
 
   return timeArray.map((item) => item.padStart(2, '0')).join(':')
 }
+
 </script>
 
 <template>
@@ -44,7 +45,7 @@ const handleMusicTime = (time: number) => {
 
       <template v-else>
         <img
-          ref="coverElement"
+          :style="coverStyle"
           :src="currentPlaySong?.cover"
           :alt="currentPlaySong?.name"
         >
