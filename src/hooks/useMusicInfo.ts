@@ -1,4 +1,4 @@
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref, watch, computed } from 'vue'
 import { ipcRenderer } from 'electron'
 import Lyric from 'lrc-file-parser'
 import {
@@ -25,10 +25,15 @@ const useMusicInfo = () => {
   const currentBroadcastIndex = ref(1)
   // 切歌列表 记录 uid
   const cutSongList = ref<number[]>([])
-  // 音乐图片元素
-  const coverElement = ref<HTMLImageElement>()
   // 处理歌词的对象
   const lyricTools = ref<any>()
+
+  // 音乐图片元素样式
+  const coverStyle = computed(() => {
+    return {
+      animationPlayState: `${isPlay.value ? 'running' : 'paused'}`
+    }
+  })
 
   // 获取随机歌单列表
   const getRandomPlayList = async () => {
@@ -185,11 +190,9 @@ const useMusicInfo = () => {
         lyricTools.value.play(
           currentPlaySong.value!.currentDuration * 1000
         )
-        coverElement.value!.style.animationPlayState = 'running'
       } else {
         audio.pause()
         lyricTools.value.pause()
-        coverElement.value!.style.animationPlayState = 'paused'
       }
     } catch (error) {
       console.log('error', error)
@@ -203,8 +206,8 @@ const useMusicInfo = () => {
     songPlayList,
     currentBroadcastIndex,
     cutSongList,
-    coverElement,
     isPlay,
+    coverStyle,
     playMusic
   }
 }
