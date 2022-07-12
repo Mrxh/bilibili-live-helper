@@ -2,6 +2,7 @@ import getQueryData from '@/utils/request'
 
 // 网易云请求url
 const baseUrl = 'https://music-node.vercel.app'
+const basePlayUrl = 'http://music.163.com/song/media/outer'
 // 默认加载的歌单id
 const defaultPlaylist = 3778678
 
@@ -37,9 +38,13 @@ const searchLyricApi = async (id: number) =>
     }
   })
 
+// 歌曲播放url
+const getMusicUrl = (id: number) => `${basePlayUrl}/url?id=${id}.mp3`
+
 export {
   searchPlaylistInfoApi,
   searchMusicInfoApi,
   isMusicPlayableApi,
-  searchLyricApi
+  searchLyricApi,
+  getMusicUrl
 }

@@ -4,7 +4,9 @@ import Lyric from 'lrc-file-parser'
 import {
   searchPlaylistInfoApi,
   searchMusicInfoApi,
-  searchLyricApi
+  isMusicPlayableApi,
+  searchLyricApi,
+  getMusicUrl
 } from '@/api'
 import type { currentMusicInfo, SongPlayItem } from '@/types'
 
@@ -38,7 +40,7 @@ const useMusicInfo = () => {
   // 获取随机歌单列表
   const getRandomPlayList = async () => {
     // 初始话获取热门榜单列表随机播放
-    const result = await searchPlaylistInfoApi(3778678)
+    const result = await searchPlaylistInfoApi()
 
     if (!result) return
 
@@ -57,13 +59,13 @@ const useMusicInfo = () => {
       isRemoveBlankLine: true,
       lyric,
       translationLyric: '',
-      onSetLyric (lines) { }
+      onSetLyric (lines) {}
     })
 
     lyricTools.value.setLyric(lyric)
   }
 
-  // 播放音乐
+  // 筛选要播放的歌曲
   const playMusic = async () => {
     isPlay.value = false
 
@@ -89,14 +91,10 @@ const useMusicInfo = () => {
     } else if (randomPlayList.value.length) {
       // 随机获取一首歌曲
       info =
-        randomPlayList.value[
-          Math.floor(Math.random() * randomPlayList.value.length)
-        ]
+        randomPlayList.value[Math.floor(Math.random() * randomPlayList.value.length)]
 
       // 从随机歌单中删除
-      const findIndex = randomPlayList.value.findIndex(
-        (item) => item.id === info.id
-      )
+      const findIndex = randomPlayList.value.findIndex((item) => item.id === info.id)
       randomPlayList.value.splice(findIndex, 1)
     } else {
       getRandomPlayList()
@@ -108,11 +106,22 @@ const useMusicInfo = () => {
       currentBroadcastIndex.value = 1
     }
 
-    const { uid, uname, id, name, al, ar, dt } = info
+    handlePlay(info)
+  }
 
+  // 处理播放
+  const handlePlay = async (music: any) => {
+    const { uid, uname, id, name, al, ar, dt } = music
+
+    const checkInfo = await isMusicPlayableApi(id)
+    if (!checkInfo) {
+      setTimeout(() => {
+        playMusic()
+      }, 1000)
+      return
+    }
     // 获取歌词
     const getLyric = await searchLyricApi(id)
-
     if (!getLyric) return
 
     let hasLyric = false
@@ -137,7 +146,7 @@ const useMusicInfo = () => {
       hasLyric
     }
 
-    audio.src = `http://music.163.com/song/media/outer/url?id=${id}.mp3`
+    audio.src = getMusicUrl(id)
     audio.volume = volume.value
 
     // 可以正常播放且无需停顿时播放音乐
@@ -187,9 +196,7 @@ const useMusicInfo = () => {
     try {
       if (newValue) {
         audio.play()
-        lyricTools.value.play(
-          currentPlaySong.value!.currentDuration * 1000
-        )
+        lyricTools.value.play(currentPlaySong.value!.currentDuration * 1000)
       } else {
         audio.pause()
         lyricTools.value.pause()
