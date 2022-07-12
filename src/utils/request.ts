@@ -46,13 +46,13 @@ const getQueryData = async (
         break
     }
 
-    if (returnErrorResult || result?.code === 0 || result?.code === 200) {
+    if (returnErrorResult || result?.code === 0 || result?.code === 200 || result?.success) {
       return result
     } else {
       Message.error(result?.message || '请求出错，再试试吧~')
     }
   } catch (error: any) {
-    Message.error(error.message)
+    Message.error(error.response?.data?.message || error.message)
   }
 }
 
