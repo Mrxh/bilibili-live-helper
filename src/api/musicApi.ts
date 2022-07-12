@@ -22,14 +22,6 @@ const searchMusicInfoApi = async (keywords: string) =>
     }
   })
 
-// 判断歌曲是否可以播放
-const isMusicPlayableApi = async (id: number) =>
-  await getQueryData(`${baseUrl}/check/music`, {
-    params: {
-      id
-    }
-  })
-
 // 搜索歌词
 const searchLyricApi = async (id: number) =>
   await getQueryData(`${baseUrl}/lyric`, {
@@ -44,7 +36,6 @@ const getMusicUrl = (id: number) => `${basePlayUrl}/url?id=${id}.mp3`
 export {
   searchPlaylistInfoApi,
   searchMusicInfoApi,
-  isMusicPlayableApi,
   searchLyricApi,
   getMusicUrl
 }

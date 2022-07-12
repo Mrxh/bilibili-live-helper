@@ -9,7 +9,9 @@ const {
   cutSongList,
   isPlay,
   coverStyle,
-  playMusic
+  playMusic,
+  musicProgress,
+  handleProgress
 } = useMusicInfo()
 
 // 处理音乐时间
@@ -28,7 +30,6 @@ const handleMusicTime = (time: number) => {
 
   return timeArray.map((item) => item.padStart(2, '0')).join(':')
 }
-
 </script>
 
 <template>
@@ -92,6 +93,12 @@ const handleMusicTime = (time: number) => {
             <div class="cut-song">
               切歌 {{ cutSongList.length }} / 3
             </div>
+            <a-slider
+              :model-value="musicProgress"
+              :max="currentPlaySong?.totalDuration"
+              :format-tooltip="(value: number) => handleMusicTime(value)"
+              @change="handleProgress"
+            />
             <div class="music-time">
               {{
                 handleMusicTime(

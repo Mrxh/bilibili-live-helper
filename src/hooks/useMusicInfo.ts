@@ -4,7 +4,6 @@ import Lyric from 'lrc-file-parser'
 import {
   searchPlaylistInfoApi,
   searchMusicInfoApi,
-  isMusicPlayableApi,
   searchLyricApi,
   getMusicUrl
 } from '@/api'
@@ -16,7 +15,7 @@ const useMusicInfo = () => {
   // 正在播放的音乐信息
   const currentPlaySong = ref<currentMusicInfo>()
   // 音量
-  const volume = ref<number>(0.2)
+  const volume = ref<number>(0)
   // 音乐是否播放
   const isPlay = ref<boolean>(false)
   // 随机播放歌单列表
@@ -29,6 +28,8 @@ const useMusicInfo = () => {
   const cutSongList = ref<number[]>([])
   // 处理歌词的对象
   const lyricTools = ref<any>()
+  // 音乐进度
+  const musicProgress = ref<number>(0)
 
   // 音乐图片元素样式
   const coverStyle = computed(() => {
@@ -59,7 +60,7 @@ const useMusicInfo = () => {
       isRemoveBlankLine: true,
       lyric,
       translationLyric: '',
-      onSetLyric (lines) {}
+      onSetLyric (lines) { }
     })
 
     lyricTools.value.setLyric(lyric)
@@ -93,10 +94,14 @@ const useMusicInfo = () => {
     } else if (randomPlayList.value.length) {
       // 随机获取一首歌曲
       info =
-        randomPlayList.value[Math.floor(Math.random() * randomPlayList.value.length)]
+        randomPlayList.value[
+          Math.floor(Math.random() * randomPlayList.value.length)
+        ]
 
       // 从随机歌单中删除
-      const findIndex = randomPlayList.value.findIndex((item) => item.id === info.id)
+      const findIndex = randomPlayList.value.findIndex(
+        (item) => item.id === info.id
+      )
       randomPlayList.value.splice(findIndex, 1)
     } else {
       getRandomPlayList()
@@ -115,13 +120,6 @@ const useMusicInfo = () => {
   const handlePlay = async (music: any) => {
     const { uid, uname, id, name, al, ar, dt } = music
 
-    const checkInfo = await isMusicPlayableApi(id)
-    if (!checkInfo) {
-      setTimeout(() => {
-        playMusic()
-      }, 1000)
-      return
-    }
     // 获取歌词
     const getLyric = await searchLyricApi(id)
     if (!getLyric) return
@@ -144,7 +142,7 @@ const useMusicInfo = () => {
       singer: ar.map((item: any) => item.name).join(' / '),
       cover: al.picUrl,
       currentDuration: 0,
-      totalDuration: dt.toString().slice(0, -3),
+      totalDuration: +dt.toString().slice(0, -3),
       hasLyric
     }
 
@@ -160,6 +158,7 @@ const useMusicInfo = () => {
     // 监听音乐时间变化
     audio.ontimeupdate = () => {
       currentPlaySong.value!.currentDuration = audio.currentTime
+      musicProgress.value = audio.currentTime
     }
 
     // 加载错误时播放下一首
@@ -171,6 +170,14 @@ const useMusicInfo = () => {
     audio.onended = () => {
       playMusic()
     }
+  }
+
+  // 处理音乐进度
+  const handleProgress = (time: number | number[]) => {
+    time = time as number
+
+    audio.currentTime = time
+    musicProgress.value = time
   }
 
   onMounted(() => {
@@ -202,7 +209,9 @@ const useMusicInfo = () => {
   watch(isPlay, (newValue) => {
     if (newValue) {
       audio.play()
-      lyricTools.value.play(currentPlaySong.value!.currentDuration * 1000)
+      lyricTools.value.play(
+        currentPlaySong.value!.currentDuration * 1000
+      )
     } else {
       audio.pause()
       lyricTools.value.pause()
@@ -216,7 +225,9 @@ const useMusicInfo = () => {
     cutSongList,
     isPlay,
     coverStyle,
-    playMusic
+    playMusic,
+    musicProgress,
+    handleProgress
   }
 }
 
