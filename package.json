@@ -12,6 +12,12 @@
 		"lint": "eslint ./src/**/*.{vue,ts} --fix",
 		"prepare": "husky install"
 	},
+	"lint-staged": {
+		"*.{vue,ts,js}": [
+			"npm run lint",
+			"git add"
+		]
+	},
 	"engines": {
 		"node": ">=14.17.0"
 	},
