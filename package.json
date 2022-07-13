@@ -39,6 +39,7 @@
 		"eslint-plugin-vue": "^9.2.0",
 		"fs": "^0.0.1-security",
 		"husky": "^8.0.1",
+		"lint-staged": "^13.0.3",
 		"lrc-file-parser": "^2.0.0",
 		"mime-types": "^2.1.35",
 		"nanoid": "^4.0.0",

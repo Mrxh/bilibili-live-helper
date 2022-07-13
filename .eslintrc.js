@@ -13,9 +13,9 @@ module.exports = {
 	rules: {
 		semi: [2, "always"],
 		quotes: [2, "double"],
-		"vue/multi-word-component-names": "off",
-		camelcase: "off",
 		"no-tabs": 0,
+		camelcase: "off",
+		"vue/multi-word-component-names": "off",
 		"no-control-regex": "off",
 		"vue/no-side-effects-in-computed-properties": "off",
 		"no-case-declarations": "off",
