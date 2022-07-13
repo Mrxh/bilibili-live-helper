@@ -1,36 +1,36 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { getAudioFiles, splitAudioSuffix } from '@/utils/nodejs'
-import { getStore, setStore } from '@/stores/electron'
-import { VOICE_BROADCAST, BARRAGE_SOUND } from '@/constants'
+import { ref, onMounted } from "vue";
+import { getAudioFiles, splitAudioSuffix } from "@/utils/nodejs";
+import { getStore, setStore } from "@/stores/electron";
+import { VOICE_BROADCAST, BARRAGE_SOUND } from "@/constants";
 
 // 表格列名
 const columns = [
   {
-    title: '触发关键词',
-    dataIndex: 'keyword'
+    title: "触发关键词",
+    dataIndex: "keyword"
   },
   {
-    title: '音效文件',
-    dataIndex: 'file'
+    title: "音效文件",
+    dataIndex: "file"
   }
-]
+];
 // 表格数据
-const data = ref<any[]>([])
+const data = ref<any[]>([]);
 
 // 读取音效文件
 onMounted(() => {
-  const files: string[] | undefined = getAudioFiles()
+  const files: string[] | undefined = getAudioFiles();
 
   if (files?.length) {
     for (const file of files) {
       data.value.push({
         keyword: splitAudioSuffix(file),
         file
-      })
+      });
     }
   }
-})
+});
 </script>
 
 <template>

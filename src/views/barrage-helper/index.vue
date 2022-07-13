@@ -1,98 +1,98 @@
 <script setup lang="ts">
-import { ref, onMounted, watch, computed } from 'vue'
-import { ipcRenderer } from 'electron'
-import BarrageHeader from './components/barrage-header/index.vue'
-import GeneralMessage from './components/barrage-message/general-message/index.vue'
-import GiftMessage from './components/barrage-message/gift-message/index.vue'
-import ActionMessage from './components/barrage-message/action-message/index.vue'
-import SendMessage from './components/barrage-message/send-message/index.vue'
-import useCommonInfo from '@/hooks/useCommonInfo'
-import { getStore } from '@/stores/electron'
-import { OPACITY, IS_PENETRATE, TOOLS_OPEN } from '@/constants'
-import { penetrateWindow, openNewWindow } from '@/utils/electron'
-import type { Hash } from '@/types'
+import { ref, onMounted, watch, computed } from "vue";
+import { ipcRenderer } from "electron";
+import BarrageHeader from "./components/barrage-header/index.vue";
+import GeneralMessage from "./components/barrage-message/general-message/index.vue";
+import GiftMessage from "./components/barrage-message/gift-message/index.vue";
+import ActionMessage from "./components/barrage-message/action-message/index.vue";
+import SendMessage from "./components/barrage-message/send-message/index.vue";
+import useCommonInfo from "@/hooks/useCommonInfo";
+import { getStore } from "@/stores/electron";
+import { OPACITY, IS_PENETRATE, TOOLS_OPEN } from "@/constants";
+import { penetrateWindow, openNewWindow } from "@/utils/electron";
+import type { Hash } from "@/types";
 
-const { barrageList, initInfo, openWebsocket, welcomeList } = useCommonInfo()
+const { barrageList, initInfo, openWebsocket, welcomeList } = useCommonInfo();
 // 背景透明度
-const opacity = ref(getStore(OPACITY))
+const opacity = ref(getStore(OPACITY));
 // 消息列表元素
-const messageListRef = ref()
+const messageListRef = ref();
 // 是否在最底部
-const isBottom = ref(true)
+const isBottom = ref(true);
 // 未读消息数量
-const unreadCount = ref(0)
+const unreadCount = ref(0);
 // 计算出最新的一条欢迎信息
 const upToDateWelcome = computed(() => {
   if (!welcomeList.value.length) {
-    return null
+    return null;
   }
-  return welcomeList.value[welcomeList.value.length - 1]
-})
+  return welcomeList.value[welcomeList.value.length - 1];
+});
 
 onMounted(async () => {
   // 监听透明度的变化
-  ipcRenderer.on('listen-window-opacity', (_, value) => {
-    opacity.value = value
-  })
+  ipcRenderer.on("listen-window-opacity", (_, value) => {
+    opacity.value = value;
+  });
 
   // 监听 up 登录信息的变化，然后重新刷新窗口
-  ipcRenderer.on('listen-up-info', () => {
-    window.location.reload()
-  })
+  ipcRenderer.on("listen-up-info", () => {
+    window.location.reload();
+  });
 
   // 初始化信息
-  const result = await initInfo()
+  const result = await initInfo();
 
-  if (!result) return
+  if (!result) return;
 
   // 初始话成功，开启长链接
-  openWebsocket()
+  openWebsocket();
 
   // 初始化开启跟随直播助手一起开启的窗口
   const otherTools: Record<keyof typeof TOOLS_OPEN, Hash> = {
-    music: '/music',
-    fans: '/fans',
-    prompt: '/prompt'
+    music: "/music",
+    fans: "/fans",
+    prompt: "/prompt"
   };
 
   (Object.keys(otherTools) as (keyof typeof TOOLS_OPEN)[]).forEach((key) => {
     if (getStore(TOOLS_OPEN[key])) {
-      openNewWindow(otherTools[key])
+      openNewWindow(otherTools[key]);
     }
-  })
-})
+  });
+});
 
 // 消息列表滚动事件
 const onScroll = () => {
-  if (!messageListRef.value) return
+  if (!messageListRef.value) return;
 
-  const { scrollTop, scrollHeight, clientHeight } = messageListRef.value
+  const { scrollTop, scrollHeight, clientHeight } = messageListRef.value;
 
   if (scrollTop < scrollHeight - clientHeight - 50) {
-    isBottom.value = false
+    isBottom.value = false;
   } else {
-    isBottom.value = true
-    unreadCount.value = 0
+    isBottom.value = true;
+    unreadCount.value = 0;
   }
-}
+};
 
 // 消息列表滚动到最底部
 const scrollToBottom = () => {
   requestAnimationFrame(() => {
-    if (!messageListRef.value) return
+    if (!messageListRef.value) return;
 
-    messageListRef.value.scrollTop = messageListRef.value.scrollHeight
-  })
-}
+    messageListRef.value.scrollTop = messageListRef.value.scrollHeight;
+  });
+};
 
 // 监听弹幕列表的变化
 watch(barrageList.value, () => {
   if (isBottom.value) {
-    scrollToBottom()
+    scrollToBottom();
   } else {
-    unreadCount.value++
+    unreadCount.value++;
   }
-})
+});
 </script>
 
 <template>

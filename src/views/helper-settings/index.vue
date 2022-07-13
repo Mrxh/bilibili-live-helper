@@ -1,60 +1,60 @@
 <script setup lang="ts">
-import ToggleTheme from '@/components/toggle-theme/index.vue'
-import AccountInfo from './components/account-info/index.vue'
-import VoiceBroadcast from './components/voice-broadcast/index.vue'
-import OtherTools from './components/other-tools/index.vue'
-import AboutHelper from './components/about-helper/index.vue'
-import type { HelperSettingsTabItem } from '@/types'
+import ToggleTheme from "@/components/toggle-theme/index.vue";
+import AccountInfo from "./components/account-info/index.vue";
+import VoiceBroadcast from "./components/voice-broadcast/index.vue";
+import OtherTools from "./components/other-tools/index.vue";
+import AboutHelper from "./components/about-helper/index.vue";
+import type { HelperSettingsTabItem } from "@/types";
 
 const tabList: HelperSettingsTabItem[] = [
   {
-    title: '主播设置',
-    subTitle: '主播只设置 UID 仅可使用少部分功能',
-    icon: 'icon-user',
+    title: "主播设置",
+    subTitle: "主播只设置 UID 仅可使用少部分功能",
+    icon: "icon-user",
     isAnchor: true,
     component: AccountInfo
   },
   {
-    title: '管理设置',
-    subTitle: '设置一个帮你自动回复的机器人，默认是主播自动回复',
-    icon: 'icon-robot',
+    title: "管理设置",
+    subTitle: "设置一个帮你自动回复的机器人，默认是主播自动回复",
+    icon: "icon-robot",
     component: AccountInfo
   },
   {
-    title: '弹幕助手',
-    subTitle: '为确保效率，部分设置更新后只对新的弹幕生效',
-    icon: 'icon-sort',
+    title: "弹幕助手",
+    subTitle: "为确保效率，部分设置更新后只对新的弹幕生效",
+    icon: "icon-sort",
     component: AboutHelper
   },
   {
-    title: '语音播报',
-    icon: 'icon-sound',
+    title: "语音播报",
+    icon: "icon-sound",
     component: VoiceBroadcast
   },
   {
-    title: '自动回复',
-    icon: 'icon-message',
+    title: "自动回复",
+    icon: "icon-message",
     component: AboutHelper
   },
   {
-    title: '点歌助手',
-    icon: 'icon-music',
+    title: "点歌助手",
+    icon: "icon-music",
     component: AboutHelper
   },
   {
-    title: '其它工具',
-    icon: 'icon-tool',
+    title: "其它工具",
+    icon: "icon-tool",
     component: OtherTools
   },
   {
-    title: '关于助手',
-    icon: 'icon-info-circle',
+    title: "关于助手",
+    icon: "icon-info-circle",
     component: AboutHelper
   }
 ].map((item, index) => ({
   key: index,
   ...item
-}))
+}));
 </script>
 
 <template>

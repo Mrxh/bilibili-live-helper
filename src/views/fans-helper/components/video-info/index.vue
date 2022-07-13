@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { inject } from 'vue'
-import type { NewVideoInfo } from '@/types'
+import { inject } from "vue";
+import type { NewVideoInfo } from "@/types";
 
 // 获取到父组件传的参数
-const isExpand: boolean = inject('isExpand')!
-const videoInfo: NewVideoInfo = inject('videoInfo')!
+const isExpand: boolean = inject("isExpand")!;
+const videoInfo: NewVideoInfo = inject("videoInfo")!;
 </script>
 
 <template>

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import useCommonInfo from '@/hooks/useCommonInfo'
-import BaseOperate from '@/components/base-operate/index.vue'
-import { openNewWindow } from '@/utils/electron'
+import useCommonInfo from "@/hooks/useCommonInfo";
+import BaseOperate from "@/components/base-operate/index.vue";
+import { openNewWindow } from "@/utils/electron";
 
 // 得到粉丝数量和人气
-const { fans, popularity } = useCommonInfo()
+const { fans, popularity } = useCommonInfo();
 </script>
 
 <template>

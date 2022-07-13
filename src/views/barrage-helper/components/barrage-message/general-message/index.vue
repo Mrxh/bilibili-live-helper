@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { provide } from 'vue'
-import MessageMedal from '../message-common/Medal.vue'
-import MessageRank from '../message-common/Rank.vue'
+import { provide } from "vue";
+import MessageMedal from "../message-common/Medal.vue";
+import MessageRank from "../message-common/Rank.vue";
 
 const { barrage } = defineProps({
   barrage: {
     type: Object,
     required: true
   }
-})
+});
 
-const { isEmoji, unameColor, uname, emoji, message } = barrage
+const { isEmoji, unameColor, uname, emoji, message } = barrage;
 
-provide('barrage', barrage)
+provide("barrage", barrage);
 </script>
 
 <template>

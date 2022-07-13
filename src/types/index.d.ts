@@ -1,6 +1,6 @@
-import type { Component } from 'vue'
+import type { Component } from "vue";
 
-export type Hash = '/' | '/settings' | '/fans' | '/music' | '/prompt';
+export type Hash = "/" | "/settings" | "/fans" | "/music" | "/prompt";
 
 export interface WindowSize {
 	width: number;
@@ -8,7 +8,7 @@ export interface WindowSize {
 }
 
 export type QueryDataArgs = {
-	method?: 'get' | 'post';
+	method?: "get" | "post";
 	params?: Record<string, any>;
 	option?: Record<string, any>;
 	returnErrorResult?: boolean;
@@ -30,7 +30,7 @@ export interface UserItem {
 export interface BarrageItem {
 	id: string;
 	barrage: any;
-	barrageType: 'general' | 'gift' | 'action';
+	barrageType: "general" | "gift" | "action";
 }
 
 export interface OperateIconItem {
@@ -79,8 +79,8 @@ export interface AccountInfoFormItem {
 export interface GiftInfo {
 	name: string;
 	action1: string;
-	action2?: string = '';
-	gift1?: string = '';
+	action2?: string = "";
+	gift1?: string = "";
 	gift2: string;
 	gift2Id: string;
 	number: string;

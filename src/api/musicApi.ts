@@ -1,10 +1,10 @@
-import getQueryData from '@/utils/request'
+import getQueryData from "@/utils/request";
 
 // 网易云请求url
-const baseUrl = 'https://music-node.vercel.app'
-const basePlayUrl = 'http://music.163.com/song/media/outer'
+const baseUrl = "https://music-node.vercel.app";
+const basePlayUrl = "http://music.163.com/song/media/outer";
 // 默认加载的歌单id
-const defaultPlaylist = 3778678
+const defaultPlaylist = 3778678;
 
 // 查找歌单信息
 const searchPlaylistInfoApi = async (id: number = defaultPlaylist) =>
@@ -12,7 +12,7 @@ const searchPlaylistInfoApi = async (id: number = defaultPlaylist) =>
     params: {
       id
     }
-  })
+  });
 
 // 搜索音乐信息
 const searchMusicInfoApi = async (keywords: string) =>
@@ -20,7 +20,7 @@ const searchMusicInfoApi = async (keywords: string) =>
     params: {
       keywords
     }
-  })
+  });
 
 // 搜索歌词
 const searchLyricApi = async (id: number) =>
@@ -28,14 +28,14 @@ const searchLyricApi = async (id: number) =>
     params: {
       id
     }
-  })
+  });
 
 // 歌曲播放url
-const getMusicUrl = (id: number) => `${basePlayUrl}/url?id=${id}.mp3`
+const getMusicUrl = (id: number) => `${basePlayUrl}/url?id=${id}.mp3`;
 
 export {
   searchPlaylistInfoApi,
   searchMusicInfoApi,
   searchLyricApi,
   getMusicUrl
-}
+};

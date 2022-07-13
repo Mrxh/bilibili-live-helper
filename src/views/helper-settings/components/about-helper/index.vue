@@ -1,27 +1,27 @@
 <script setup lang="ts">
-import { shell } from 'electron'
-import type { connectItem } from '@/types'
+import { shell } from "electron";
+import type { connectItem } from "@/types";
 
 const connectList: connectItem[] = [
   {
-    label: 'qq群',
-    value: '1016788384',
-    href: 'https://jq.qq.com/?_wv=1027&k=n8dX7wdt'
+    label: "qq群",
+    value: "1016788384",
+    href: "https://jq.qq.com/?_wv=1027&k=n8dX7wdt"
   },
   {
-    label: 'qq',
-    value: '473033518',
-    href: 'http://wpa.qq.com/msgrd?v=3&uin=473033518&site=qq&menu=yes'
+    label: "qq",
+    value: "473033518",
+    href: "http://wpa.qq.com/msgrd?v=3&uin=473033518&site=qq&menu=yes"
   },
   {
-    label: '微信',
-    value: 'ayang473033518'
+    label: "微信",
+    value: "ayang473033518"
   }
-]
+];
 
 const openBrowser = (href?: string) => {
-  href && shell.openExternal(href)
-}
+  href && shell.openExternal(href);
+};
 </script>
 
 <template>

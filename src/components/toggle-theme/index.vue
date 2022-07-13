@@ -1,26 +1,26 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-import { getStore, setStore } from '@/stores/electron'
-import { THEME } from '@/constants'
-import { toggleWindowTheme } from '@/utils/electron'
+import { ref, watch } from "vue";
+import { getStore, setStore } from "@/stores/electron";
+import { THEME } from "@/constants";
+import { toggleWindowTheme } from "@/utils/electron";
 
-type Theme = 'light' | 'dark';
+type Theme = "light" | "dark";
 
-const theme = ref<Theme>(getStore(THEME) as Theme)
+const theme = ref<Theme>(getStore(THEME) as Theme);
 
 watch(
   theme,
   (newTheme) => {
-    document.body.setAttribute('arco-theme', newTheme)
+    document.body.setAttribute("arco-theme", newTheme);
 
-    toggleWindowTheme(newTheme)
+    toggleWindowTheme(newTheme);
 
-    setStore(THEME, newTheme)
+    setStore(THEME, newTheme);
   },
   {
     immediate: true
   }
-)
+);
 </script>
 
 <template>

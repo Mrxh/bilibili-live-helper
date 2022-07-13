@@ -1,22 +1,22 @@
 <script setup lang="ts">
-import { ref, inject, onMounted } from 'vue'
-import type { BarrageMedal } from '@/types'
+import { ref, inject, onMounted } from "vue";
+import type { BarrageMedal } from "@/types";
 
-const barrage: any = inject('barrage')
+const barrage: any = inject("barrage");
 
 // 是否显示勋章
-const isShow = ref(false)
+const isShow = ref(false);
 // 勋章信息
-const medalInfo = ref<BarrageMedal>()
+const medalInfo = ref<BarrageMedal>();
 
 // 转换颜色
-const convertColor = (color: any) => `#${color.toString(16).padStart(6, 0)}`
+const convertColor = (color: any) => `#${color.toString(16).padStart(6, 0)}`;
 
 onMounted(() => {
-  const { medal, fans_medal } = barrage
+  const { medal, fans_medal } = barrage;
 
   if (medal && medal.length) {
-    isShow.value = true
+    isShow.value = true;
 
     medalInfo.value = {
       name: medal[1],
@@ -25,9 +25,9 @@ onMounted(() => {
       borderColor: convertColor(medal[7]),
       bgStartColor: convertColor(medal[8]),
       bgEndColor: convertColor(medal[9])
-    }
+    };
   } else if (fans_medal && fans_medal.medal_level) {
-    isShow.value = true
+    isShow.value = true;
 
     medalInfo.value = {
       name: fans_medal.medal_name,
@@ -36,9 +36,9 @@ onMounted(() => {
       borderColor: convertColor(fans_medal.medal_color_border),
       bgStartColor: convertColor(fans_medal.medal_color_end),
       bgEndColor: convertColor(fans_medal.medal_color_start)
-    }
+    };
   }
-})
+});
 </script>
 
 <template>

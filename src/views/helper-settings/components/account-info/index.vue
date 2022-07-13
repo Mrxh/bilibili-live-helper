@@ -1,76 +1,76 @@
 <script setup lang="ts">
-import { onMounted, reactive, provide } from 'vue'
-import { Message } from '@arco-design/web-vue'
-import QRCode from './QRCode.vue'
-import { getStore, setStore, deleteStore } from '@/stores/electron'
-import { UP_INFO, ROBOT_INFO } from '@/constants'
-import { changeUpInfo } from '@/utils/electron'
-import type { AccountInfoForm, AccountInfoFormItem } from '@/types'
+import { onMounted, reactive, provide } from "vue";
+import { Message } from "@arco-design/web-vue";
+import QRCode from "./QRCode.vue";
+import { getStore, setStore, deleteStore } from "@/stores/electron";
+import { UP_INFO, ROBOT_INFO } from "@/constants";
+import { changeUpInfo } from "@/utils/electron";
+import type { AccountInfoForm, AccountInfoFormItem } from "@/types";
 
 const { isAnchor } = defineProps({
   isAnchor: {
     type: Boolean,
     default: false
   }
-})
+});
 
 // 判断是否为主播
-const ACCOUNT_INFO = isAnchor ? UP_INFO : ROBOT_INFO
+const ACCOUNT_INFO = isAnchor ? UP_INFO : ROBOT_INFO;
 
 // label 前缀
-const prefixLabel = isAnchor ? 'Up' : 'Robot'
+const prefixLabel = isAnchor ? "Up" : "Robot";
 
 // form 表单项
 const form = reactive<AccountInfoForm>({
   uid: undefined,
-  csrf: '',
-  cookie: ''
-})
+  csrf: "",
+  cookie: ""
+});
 
 // form 表单项
 const formItem: AccountInfoFormItem[] = [
   {
-    label: 'Uid',
-    field: 'uid',
+    label: "Uid",
+    field: "uid",
     required: true,
-    component: 'a-input-number'
+    component: "a-input-number"
   },
   {
-    label: 'Cookie',
-    field: 'cookie',
+    label: "Cookie",
+    field: "cookie",
     required: !isAnchor,
-    component: 'a-input-password'
+    component: "a-input-password"
   },
   {
-    label: 'Csrf',
-    field: 'csrf',
+    label: "Csrf",
+    field: "csrf",
     required: !isAnchor,
-    component: 'a-input-password'
+    component: "a-input-password"
   }
-]
+];
 
 // 获取 form 表单保存下来的值
 const getFromValue = () => {
   (Object.keys(form) as (keyof AccountInfoForm)[]).forEach((key) => {
-    form[key] = getStore(ACCOUNT_INFO[key], false)
-  })
-}
+    form[key] = getStore(ACCOUNT_INFO[key], false);
+  });
+};
 
 // 初始化获取表单内容
 onMounted(() => {
-  getFromValue()
-})
+  getFromValue();
+});
 
 // 清除登录信息
 const clearAccountInfo = () => {
   (Object.keys(ACCOUNT_INFO) as (keyof AccountInfoForm)[]).forEach((key) => {
-    form[key] = undefined
+    form[key] = undefined;
 
-    deleteStore(ACCOUNT_INFO[key])
-  })
+    deleteStore(ACCOUNT_INFO[key]);
+  });
 
-  Message.error('清除成功，请重新登录')
-}
+  Message.error("清除成功，请重新登录");
+};
 
 // 提交表单
 const handleSubmit = (values: Record<string, any>) => {
@@ -78,22 +78,22 @@ const handleSubmit = (values: Record<string, any>) => {
   // 判断内容是否有变化
   (Object.keys(form) as (keyof AccountInfoForm)[]).forEach((key) => {
     if (values[key] !== getStore(ACCOUNT_INFO[key], false)) {
-      setStore(ACCOUNT_INFO[key], values[key])
+      setStore(ACCOUNT_INFO[key], values[key]);
 
-      isChange = true
+      isChange = true;
     }
-  })
+  });
 
   if (isChange) {
-    getFromValue()
+    getFromValue();
 
-    isAnchor && changeUpInfo()
+    isAnchor && changeUpInfo();
   }
 
-  Message.success('保存成功')
-}
+  Message.success("保存成功");
+};
 
-provide('handleSubmit', handleSubmit)
+provide("handleSubmit", handleSubmit);
 </script>
 
 <!-- TODO: 清除表单项的值 -->

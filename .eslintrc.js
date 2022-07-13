@@ -11,6 +11,8 @@ module.exports = {
 	},
 	plugins: ["vue", "@typescript-eslint"],
 	rules: {
+		semi: [2, "always"],
+		quotes: [2, "double"],
 		"vue/multi-word-component-names": "off",
 		camelcase: "off",
 		"no-tabs": 0,

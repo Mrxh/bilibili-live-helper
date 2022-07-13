@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { ref, onMounted, provide } from 'vue'
-import MessageMedal from '../message-common/Medal.vue'
-import MessageRank from '../message-common/Rank.vue'
-import type { HighInfo } from '@/types'
+import { ref, onMounted, provide } from "vue";
+import MessageMedal from "../message-common/Medal.vue";
+import MessageRank from "../message-common/Rank.vue";
+import type { HighInfo } from "@/types";
 
 const { barrage } = defineProps({
   barrage: {
     type: Object,
     required: true
   }
-})
+});
 
 const {
   msg_type,
@@ -21,27 +21,27 @@ const {
   highlight_color,
   copy_writing_v2,
   rankInfo
-} = barrage
+} = barrage;
 
 // 高能用户信息
-const highInfo = ref<HighInfo>()
+const highInfo = ref<HighInfo>();
 
 onMounted(() => {
   // 对高能用户的信息进行切割
   if (msg_type === -1 || msg_type === -10) {
-    let value = msg_type === -1 ? copy_writing_v2 : rankInfo.msg
+    let value = msg_type === -1 ? copy_writing_v2 : rankInfo.msg;
 
-    value = value.replace('<%', ' ').replace('%>', ' ').split(/\s+/)
+    value = value.replace("<%", " ").replace("%>", " ").split(/\s+/);
 
     highInfo.value = {
       prefix: value[0],
-      name: value[value.includes('<^icon^>') ? 2 : 1],
+      name: value[value.includes("<^icon^>") ? 2 : 1],
       suffix: value[value.length - 1]
-    }
+    };
   }
-})
+});
 
-provide('barrage', barrage)
+provide("barrage", barrage);
 </script>
 
 <template>

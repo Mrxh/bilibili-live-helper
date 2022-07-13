@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import type { GiftInfo } from '@/types'
+import { ref, onMounted } from "vue";
+import type { GiftInfo } from "@/types";
 
 const { barrage } = defineProps({
   barrage: {
     type: Object,
     required: true
   }
-})
+});
 // 礼物信息
-const giftInfo = ref<GiftInfo>()
+const giftInfo = ref<GiftInfo>();
 
 onMounted(() => {
   const {
@@ -23,7 +23,7 @@ onMounted(() => {
     gift_id,
     num,
     combo_num
-  } = barrage
+  } = barrage;
 
   if (batch_combo_send && blind_gift) {
     // 爆出礼物
@@ -32,7 +32,7 @@ onMounted(() => {
       gift_name,
       gift_num,
       blind_gift: { gift_action, original_gift_name }
-    } = batch_combo_send
+    } = batch_combo_send;
 
     giftInfo.value = {
       name: uname,
@@ -42,7 +42,7 @@ onMounted(() => {
       gift2: gift_name,
       gift2Id: giftId || gift_id,
       number: gift_num
-    }
+    };
   } else {
     // 投喂礼物
     giftInfo.value = {
@@ -51,9 +51,9 @@ onMounted(() => {
       gift2: giftName || gift_name,
       gift2Id: giftId || gift_id,
       number: num || combo_num
-    }
+    };
   }
-})
+});
 </script>
 
 <template>

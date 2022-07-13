@@ -1,54 +1,54 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import { getAudioFiles, splitAudioSuffix } from '@/utils/nodejs'
-import BaseOperate from '@/components/base-operate/index.vue'
-import { penetrateWindow } from '@/utils/electron'
-import { getStore } from '@/stores/electron'
-import { IS_PENETRATE } from '@/constants'
+import { onMounted, ref } from "vue";
+import { getAudioFiles, splitAudioSuffix } from "@/utils/nodejs";
+import BaseOperate from "@/components/base-operate/index.vue";
+import { penetrateWindow } from "@/utils/electron";
+import { getStore } from "@/stores/electron";
+import { IS_PENETRATE } from "@/constants";
 
 // 内容列表外层元素
-const listOuterRef = ref<HTMLDivElement>()
+const listOuterRef = ref<HTMLDivElement>();
 // 内容列表内部元素
-const listInnerRef = ref<HTMLUListElement>()
+const listInnerRef = ref<HTMLUListElement>();
 // 音频关键词关键词列表
-const audioKeywords = ref<string[]>([])
+const audioKeywords = ref<string[]>([]);
 
 // 定时器
-let timer: NodeJS.Timer | null = null
+let timer: NodeJS.Timer | null = null;
 
 // 列表滚动
 const onScroll = () => {
   setTimeout(() => {
-    listOuterRef.value?.appendChild(listInnerRef.value?.cloneNode(true)!)
+    listOuterRef.value?.appendChild(listInnerRef.value?.cloneNode(true)!);
 
     timer = setInterval(() => {
       if (
 				listOuterRef.value?.scrollTop! >=
 				listInnerRef.value?.scrollHeight!
       ) {
-				listOuterRef.value!.scrollTop = 0
+				listOuterRef.value!.scrollTop = 0;
       } else {
-				listOuterRef.value!.scrollTop += 0.5
+				listOuterRef.value!.scrollTop += 0.5;
       }
-    }, 50)
-  }, 0)
-}
+    }, 50);
+  }, 0);
+};
 
 // 停止滚动
 const stopScroll = () => {
-  timer && clearInterval(timer)
-  timer = null
-}
+  timer && clearInterval(timer);
+  timer = null;
+};
 
 onMounted(() => {
-  const files = getAudioFiles()
+  const files = getAudioFiles();
 
   if (files?.length) {
-    audioKeywords.value = files.map((item) => splitAudioSuffix(item))
+    audioKeywords.value = files.map((item) => splitAudioSuffix(item));
   }
 
-  onScroll()
-})
+  onScroll();
+});
 </script>
 
 <template>
