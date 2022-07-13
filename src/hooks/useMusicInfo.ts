@@ -29,7 +29,7 @@ const useMusicInfo = () => {
 	// 切歌列表 记录 uid
 	const cutSongList = ref<number[]>([]);
 	// 处理歌词的对象
-	const lyricTools = ref<any>();
+	const lyricTools = ref<Record<string, any>>();
 	// 音乐进度
 	const musicProgress = ref<number>(0);
 
@@ -72,7 +72,10 @@ const useMusicInfo = () => {
 	const playMusic = async () => {
 		isPlay.value = false;
 
-		if (currentPlaySong.value?.cover) currentPlaySong.value!.cover = "";
+		if (currentPlaySong.value) {
+			audio.currentTime = 0;
+			currentPlaySong.value.lyric = "";
+		}
 
 		let info: any = {};
 
@@ -122,9 +125,19 @@ const useMusicInfo = () => {
 	const handlePlay = async (music: any) => {
 		const { uid, uname, id, name, al, ar, dt } = music;
 
+		currentPlaySong.value = {
+			uid,
+			uname,
+			id,
+			name,
+			singer: ar.map((item: any) => item.name).join(" / "),
+			cover: al.picUrl,
+			currentDuration: 0,
+			totalDuration: +dt.toString().slice(0, -3),
+		};
+
 		// 获取歌词
 		const getLyric = await searchLyricApi(id);
-		if (!getLyric) return;
 
 		let hasLyric = false;
 		let lyric = "纯音乐，请欣赏";
@@ -135,25 +148,21 @@ const useMusicInfo = () => {
 
 			lyric = getLyric.lrc.lyric;
 		}
+		currentPlaySong.value.hasLyric = hasLyric;
 
-		currentPlaySong.value = {
-			uid,
-			uname,
-			id,
-			name,
-			singer: ar.map((item: any) => item.name).join(" / "),
-			cover: al.picUrl,
-			currentDuration: 0,
-			totalDuration: +dt.toString().slice(0, -3),
-			hasLyric,
-		};
 		audio.src = getMusicUrl(id);
 		audio.volume = volume.value;
 
 		// 可以正常播放且无需停顿时播放音乐
 		audio.oncanplaythrough = () => {
 			isPlay.value = true;
-			handleLyric(lyric);
+
+			if (hasLyric) {
+				handleLyric(lyric);
+			} else {
+				currentPlaySong.value!.lyric = lyric;
+				lyricTools.value = undefined;
+			}
 		};
 
 		// 监听音乐时间变化
@@ -178,7 +187,10 @@ const useMusicInfo = () => {
 		time = time as number;
 
 		audio.currentTime = time;
-		musicProgress.value = time;
+
+		if (!isPlay.value) isPlay.value = true;
+
+		lyricTools.value?.play(time * 1000);
 	};
 
 	// 处理音量
@@ -223,12 +235,12 @@ const useMusicInfo = () => {
 	watch(isPlay, (newValue) => {
 		if (newValue) {
 			audio.play();
-			lyricTools.value.play(
+			lyricTools.value?.play(
 				currentPlaySong.value!.currentDuration * 1000
 			);
 		} else {
 			audio.pause();
-			lyricTools.value.pause();
+			lyricTools.value?.pause();
 		}
 	});
 
